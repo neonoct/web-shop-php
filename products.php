@@ -69,7 +69,7 @@
                             echo '<div class="product-item">';
                             echo '<img src="' . $row["imageUrl"] . '" alt="' . $row["productName"] . '">';
                             echo '<h4>' . $row["productName"] . '</h4>';
-                            echo '<p>' . $row["description"] . '</p>';
+                            echo '<p class="description" >' . $row["description"] . '</p>';
                             echo '<p class="price">Price: $' . $row["productPrice"] . '</p>';
                             echo '<button>Add to Cart</button>';
                             echo '</div>';

@@ -76,8 +76,12 @@ footer {
 }
 
 .product-item .description {
-    flex-grow: 1; /* This will expand the description to fill available space */
-    /* Add more styles here if necessary */
+    /* Sets a fixed height for all descriptions */
+    height: 4.5em; /* Adjust this value to fit the typical amount of text */
+    overflow: hidden; /* Hides overflow */
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Limits the content to 3 lines */
+    -webkit-box-orient: vertical;
 }
 
 .product-container {
@@ -86,14 +90,6 @@ footer {
     justify-content: center;
 }
 
-/* Add this class to your product description paragraph */
-.description {
-    height: 100%; /* This will make sure all descriptions take up the same amount of space */
-    overflow: hidden; /* This will hide any overflow */
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* This will limit the content to 3 lines */
-    -webkit-box-orient: vertical;
-}
 
 h2, h3 {
     text-align: center;
