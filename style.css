@@ -61,6 +61,7 @@ footer {
     box-shadow: 0px 0px 10px rgba(0,0,0,0.1); /* Optional: Adds a subtle shadow */
     display: flex;
     flex-direction: column; /* Stack the content vertically */
+    justify-content: space-between; /* This will push the button to the bottom */
 }
 
 .product-item img {
@@ -69,11 +70,29 @@ footer {
     object-fit: cover; /* This will cover the area, cropping the image as needed */
 }
 
+.product-item h4,
+.product-item p {
+    margin: 5px 0; /* Adjust the margin as needed */
+}
+
+.product-item .description {
+    flex-grow: 1; /* This will expand the description to fill available space */
+    /* Add more styles here if necessary */
+}
 
 .product-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+}
+
+/* Add this class to your product description paragraph */
+.description {
+    height: 100%; /* This will make sure all descriptions take up the same amount of space */
+    overflow: hidden; /* This will hide any overflow */
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* This will limit the content to 3 lines */
+    -webkit-box-orient: vertical;
 }
 
 h2, h3 {
