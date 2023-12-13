@@ -1,0 +1,18 @@
+-- Inserting laptops
+INSERT INTO products (productName, description, productPrice, active, categoryId, imageUrl)
+VALUES 
+('Gamer Pro Laptop', '15.6-inch display with high-end graphics and processing power for gaming and multitasking.', 1299.99, TRUE, 1, 'https://rog.asus.com/media/1622468922392.jpg'),
+('UltraBook Slim', '13.3-inch slim and lightweight laptop with extended battery life for business professionals.', 999.99, TRUE, 1, 'https://cdn.ndtv.com/tech/images/gadgets/samsung_notebook_9_official.jpg');
+
+-- Inserting desktop PCs
+INSERT INTO products (productName, description, productPrice, active, categoryId, imageUrl)
+VALUES 
+('Home Office PC', 'Compact desktop PC with efficient performance for home office use.', 599.99, TRUE, 2, 'https://www.paradigit.nl/picture/80063595/1000/750'),
+('Gaming Tower', 'High-performance gaming desktop with the latest GPU for an immersive gaming experience.', 1499.99, TRUE, 2, 'https://c1.neweggimages.com/ProductImage/B17TS2304240R6ORM1D.jpg');
+
+-- Inserting PC parts
+INSERT INTO products (productName, description, productPrice, active, categoryId, imageUrl)
+VALUES 
+('256GB SSD', 'Solid State Drive with 256GB capacity, offering fast read and write speeds.', 79.99, TRUE, 3, 'https://image-us.samsung.com/SamsungUS/pim/migration/computing/memory-storage/solid-state-drives/mz-v5p256bw/Pdpdefault-mz-v5p256bw-600x600-C1-052016.jpg?$product-details-jpg'),
+('16GB DDR4 RAM', '16GB DDR4 desktop memory for high-speed multitasking.', 149.99, TRUE, 3, 'https://media.distrelec.com/Web/WebShopImages/landscape_large/1-/01/Kingston-HX432S20IBK232-30146191-01.jpg'),
+('GTX 1080 Ti Graphics Card', 'Top-tier graphics card for gaming and creative work.', 699.99, TRUE, 3, 'https://asset.msi.com/resize/image/global/product/product_3_20171012153630_59df1b7ecd614.png62405b38c58fe0f07fcef2367d8a9ba1/1024.png');
