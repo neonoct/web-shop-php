@@ -19,29 +19,28 @@
             </ul>
         </nav>
     </header>
-        <!-- Search Bar -->
-    <div class="search-container">
-        <input type="text" placeholder="Search products..." name="search">
-        <button type="submit">Search</button>
-    </div>
-        <!-- Category Selector -->
-    <div class="category-container">
-        <label for="categories">Choose a category:</label>
-        <select name="categories" id="categories">
-            <option value="all">All Categories</option>
-            <option value="electronics">Electronics</option>
-            <option value="clothing">Clothing</option>
-            <option value="accessories">Accessories</option>
-            <!-- Add more categories as needed -->
-        </select>
-    </div>
-
     <main>
         <h2>Welcome to Our Webshop!</h2>
         <!-- Featured Products Section -->
         <section class="featured-products">
             <h3>Featured Products</h3>
             <!-- Product items will be added here -->
+                    <!-- Search Bar -->
+            <div class="search-container">
+                <input type="text" placeholder="Search products..." name="search">
+                <button type="submit">Search</button>
+            </div>
+                <!-- Category Selector -->
+            <div class="category-container">
+                <label for="categories">Choose a category:</label>
+                <select name="categories" id="categories">
+                    <option value="all">All Categories</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="clothing">Clothing</option>
+                    <option value="accessories">Accessories</option>
+                    <!-- Add more categories as needed -->
+                </select>
+            </div>
             
             <div class="product-container" >
                 <?php
