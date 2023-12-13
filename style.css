@@ -27,6 +27,10 @@ header {
     padding: 1em 0;
 }
 
+h2, h3 {
+    text-align: center;
+}
+
 nav ul {
     list-style: none;
 }
@@ -91,9 +95,7 @@ footer {
 }
 
 
-h2, h3 {
-    text-align: center;
-}
+
 
 /* Search Bar Styles */
 .search-container {

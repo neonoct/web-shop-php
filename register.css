@@ -1,0 +1,154 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure full viewport height */
+}
+
+header {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+}
+
+h2, h3 {
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+main {
+    padding: 20px;
+    flex-grow: 1; /* Allows main content to grow and push footer down */
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+    margin-top: auto; /* Pushes the footer to the bottom */
+}
+
+/* allign register fields to middle and make them look good */
+.register-form {
+    width: 100%;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.register-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.register-form .form-control {
+    width: 100%;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.register-form .form-control:focus {
+    border-color: #5cb85c;
+}
+/* btn button dif */
+
+.register-form .form-control, .register-form .btn {
+    min-height: 40px;
+    border-radius: 3px;
+}
+
+.register-form input {
+    width: 100%;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
+.register-form button {
+    width: 100%;
+    padding: 1em;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 1em;
+}
+
+.register-form button:hover {
+    background-color: #444;
+}
+
+.register-form .btn {        
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 5px;
+    background: #5cb85c;
+    border: none;
+    min-width: 200px;
+}
+
+.register-form .btn:hover, .register-form .btn:focus {
+    background: #4cae4c;
+    outline: none !important;
+}
+
+.register-form a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.register-form a:hover {
+    text-decoration: none;
+}
+
+.register-form .fa {
+    font-size: 21px;
+}
+
+.register-form .fa-paper-plane {
+    font-size: 18px;
+}
+
+.register-form .fa-check {
+    color: #fff;
+    left: 17px;
+    top: 18px;
+    font-size: 7px;
+    position: absolute;
+}
+
+
+
+
+
