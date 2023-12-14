@@ -22,7 +22,7 @@
 
     <main>
         <h2>Welcome to Our Webshop!</h2>
-        <form id="loginForm" class="login-form">
+        <form id="loginForm" class="login-form" method="POST">
             <!-- <input type="text" id="loginUsername" name="username" placeholder="Username" required> change this with email-->
             <input type="email" id="loginEmail" name="email" placeholder="Email" required>
             <input type="password" id="loginPassword" name="password" placeholder="Password" required>

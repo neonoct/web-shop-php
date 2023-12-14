@@ -16,3 +16,48 @@ VALUES
 ('256GB SSD', 'Solid State Drive with 256GB capacity, offering fast read and write speeds.', 79.99, TRUE, 3, 'https://image-us.samsung.com/SamsungUS/pim/migration/computing/memory-storage/solid-state-drives/mz-v5p256bw/Pdpdefault-mz-v5p256bw-600x600-C1-052016.jpg?$product-details-jpg'),
 ('16GB DDR4 RAM', '16GB DDR4 desktop memory for high-speed multitasking.', 149.99, TRUE, 3, 'https://media.distrelec.com/Web/WebShopImages/landscape_large/1-/01/Kingston-HX432S20IBK232-30146191-01.jpg'),
 ('GTX 1080 Ti Graphics Card', 'Top-tier graphics card for gaming and creative work.', 699.99, TRUE, 3, 'https://asset.msi.com/resize/image/global/product/product_3_20171012153630_59df1b7ecd614.png62405b38c58fe0f07fcef2367d8a9ba1/1024.png');
+
+
+        <?php
+            // Database configuration
+            $host     = "localhost";
+            $dbName   = "shopDb";
+            $username = "Webuser";
+            $password = "Lab2021";
+
+            // Create connection
+            $conn = new mysqli($host, $username, $password, $dbName);
+
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            //check first if it the post is submitted from js
+            
+
+
+            
+            // check if email already exists
+            $email = $_POST['email'];
+            $sql = "SELECT email FROM customers WHERE email = '$email'";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                echo "<p>Email already exists.</p>";
+            }
+            else {
+                // insert into database
+                $firstname = $_POST['firstname'];
+                $lastname = $_POST['lastname'];
+                $email = $_POST['email'];
+                $address = $_POST['address'];
+                $password = $_POST['password'];
+                $sql = "INSERT INTO customers (firstname, lastname, email, address, password) VALUES ('$firstname', '$lastname', '$email', '$address', '$password')";
+                if ($conn->query($sql) === TRUE) {
+                    echo "<p>Registration successful.</p>";
+                } else {
+                    echo "Error: " . $sql . "<br>" . $conn->error;
+                }
+            }
+            $conn->close();
+        ?>
