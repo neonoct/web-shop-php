@@ -16,6 +16,7 @@
                 <li><a href="login.php">Login</a></li>
                 <li><a href="register.php">Register</a></li>
                 <li><a href="cart.php">Cart</a></li>
+                <li><a href="myaccount.php">My Account</a></li>
             </ul>
         </nav>
     </header>
@@ -91,8 +92,6 @@
                     // Handle the error if insertion into logins fails
                     echo "Error: " . $loginSql . "<br>" . $conn->error;
                 }
-            } else {
-                echo "<script>alert('POST data is empty.');</script>";
             }
             
 

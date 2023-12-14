@@ -25,7 +25,7 @@
         <h2>Welcome to Our Webshop!</h2>
         <!-- Featured Products Section -->
         <section class="featured-products">
-            <h3>put some info about Webshop</h3>
+            <h3>Cart</h3>
         </section>
     </main>
 

@@ -16,6 +16,7 @@
                 <li><a href="login.php">Login</a></li>
                 <li><a href="register.php">Register</a></li>
                 <li><a href="cart.php">Cart</a></li>
+                <li><a href="myaccount.php">My Account</a></li>
             </ul>
         </nav>
     </header>
@@ -34,7 +35,8 @@
         <script src="checkloginfields.js"></script>
 
         <?php
-
+            session_start();
+            $_SESSION['role'] = "guest";
             // Database configuration
             $host     = "localhost";
             $dbName   = "shopDb";
@@ -68,7 +70,7 @@
                     $row = $result->fetch_assoc();
                     if (password_verify($password, $row['password'])) {
                         // Password matches, it is either a registered user or an admin
-                        session_start();
+                        
                         $_SESSION['email'] = $email; // Store the email in the session as both admin and user have email
                         //check if it is a registered user or admin
                         $sql = "SELECT customerID, firstname, lastname, address FROM customers WHERE email = '" . $conn->real_escape_string($email) . "'";
@@ -78,6 +80,7 @@
                             //header("Location: products.php");
                             //fill the session with the customerID, firstname, lastname, address
                             $row = $result->fetch_assoc();
+                            $_SESSION['role'] = "customer";
                             $_SESSION['customerID'] = $row['customerID'];
                             $_SESSION['firstname'] = $row['firstname'];
                             $_SESSION['lastname'] = $row['lastname'];
@@ -95,6 +98,7 @@
                                 $sql = "SELECT adminID, name FROM admins WHERE email = '" . $conn->real_escape_string($email) . "'";
                                 $result = $conn->query($sql);
                                 $row = $result->fetch_assoc();
+                                $_SESSION['role'] = "admin";
                                 $_SESSION['adminID'] = $row['adminID'];
                                 $_SESSION['name'] = $row['name'];
                                 header("Location: admin.php");

@@ -19,7 +19,16 @@ if ($conn->connect_error) {
 // Add an admin to the database
 $adminname = "admin1";
 $adminemail = "admin1@email.com";
-$adminpassword = "admin1";
+$adminpassword = "admin01.";
+
+//if it is already on the database, it will not be added
+$checkSql = "SELECT * FROM admins WHERE email = '$adminemail'";
+$result = $conn->query($checkSql);
+if ($result->num_rows > 0) {
+    echo "<p>Admin already exists.</p>";
+    exit();
+}
+
 $adminpassword = password_hash($adminpassword, PASSWORD_DEFAULT);
 
 // First, attempt to insert into logins table
