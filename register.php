@@ -23,13 +23,13 @@
     <main>
         <h2>Welcome to Our Webshop!</h2>
         <form id="registrationForm" class="register-form">
-            <input type="text" id="firstname" name="firstname" placeholder="firstname" required>
-            <input type="text" id="lastname" name="lastname" placeholder="lastname" required>
-            <input type="email" id="email" name="email" placeholder="Email" required>
+            <input type="text" id="firstname" name="firstname" placeholder="firstname" >
+            <input type="text" id="lastname" name="lastname" placeholder="lastname" >
+            <input type="text" id="email" name="email" placeholder="Email" ><!-- to show that checking with js changed input type to text -->
             <!-- address -->
-            <input type="text" id="address" name="address" placeholder="Address" required>
-            <input type="password" id="password" name="password" placeholder="Password" required>
-            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+            <input type="text" id="address" name="address" placeholder="Address" >
+            <input type="password" id="password" name="password" placeholder="Password" >
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" >
             <button type="submit">Register</button>
         </form>
         
@@ -39,6 +39,7 @@
     <footer>
         <p>Contact Us: contact@yourwebshop.com</p>
     </footer>
+    <script src="checkregisterfields.js"></script>
 </body>
 </html>
 
