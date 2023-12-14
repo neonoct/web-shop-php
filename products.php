@@ -89,7 +89,7 @@
     </main>
 
     <footer>
-        <p>Contact Us: contact@yourwebshop.com</p>
+        <p>Contact Us: contact@frk-tech.com</p>
     </footer>
         <!-- Place jQuery script before your custom script -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

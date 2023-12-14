@@ -36,7 +36,11 @@
 
         <?php
             session_start();
-            $_SESSION['role'] = "guest";
+            //if already specified in the session then no need to check again
+            if (!isset($_SESSION['role'])) {
+                $_SESSION['role'] = "guest";
+            }
+            
             // Database configuration
             $host     = "localhost";
             $dbName   = "shopDb";
@@ -126,7 +130,7 @@
     </main>
 
     <footer>
-        <p>Contact Us: contact@yourwebshop.com</p>
+        <p>Contact Us: contact@frk-tech.com</p>
     </footer>
 </body>
 </html>

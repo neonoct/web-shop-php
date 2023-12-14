@@ -30,7 +30,7 @@
     </main>
 
     <footer>
-        <p>Contact Us: contact@yourwebshop.com</p>
+        <p>Contact Us: contact@frk-tech.com</p>
     </footer>
 </body>
 </html>
