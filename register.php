@@ -69,7 +69,12 @@
                     echo "<script>alert('Email already in use.');</script>";
                     exit();
                 }
-            
+
+                //hash the password using salt
+                $password = password_hash($password, PASSWORD_DEFAULT);
+                
+                
+
                 // First, attempt to insert into logins table
                 $loginSql = "INSERT INTO logins (email, password) VALUES ('$email', '$password')";
                 
