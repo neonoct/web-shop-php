@@ -61,3 +61,28 @@ VALUES
             }
             $conn->close();
         ?>
+
+
+
+        loginss
+
+                        if ($result->num_rows > 0) {
+                    // User exists, check if the password is correct
+                    $row = $result->fetch_assoc();
+                    if (password_verify($password, $row['password'])) {
+                        // Password is correct, log the user in
+                        session_start();
+                        $_SESSION['address'] = $row['address'];
+                        $_SESSION['firstname'] = $row['firstname'];
+                        $_SESSION['lastname'] = $row['lastname'];
+                        $_SESSION['email'] = $row['email'];
+                        header('Location: index.php');
+                        exit;
+                    } else {
+                        // Password is incorrect, show an error message
+                        echo "<p class='error'>Incorrect password.</p>";
+                    }
+                } else {
+                    // User doesn't exist, show an error message
+                    echo "<p class='error'>User not found.</p>";
+                }
