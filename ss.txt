@@ -86,3 +86,37 @@ VALUES
                     // User doesn't exist, show an error message
                     echo "<p class='error'>User not found.</p>";
                 }
+
+
+                                       if ($result->num_rows > 0) {
+                            // it is a registered user
+                            //header("Location: products.php");
+                            //fill the session with the customerID, firstname, lastname, address
+                            $row = $result->fetch_assoc();
+                            
+                            $_SESSION['customerID'] = $row['customerID'];
+                            $_SESSION['firstname'] = $row['firstname'];
+                            $_SESSION['lastname'] = $row['lastname'];
+                            $_SESSION['address'] = $row['address'];
+                            header("Location: myaccount.php");
+                        } else {
+                            // it is an admin
+                            //header("Location: admin.php");
+                            //check if it is really an admin by checking if it is in admins table
+                            $sql = "SELECT email FROM admins WHERE email = '" . $conn->real_escape_string($email) . "'";
+                            $result = $conn->query($sql);
+                            if ($result->num_rows > 0) {
+                                // it is an admin
+                                //fill the session with the adminID,name
+                                $sql = "SELECT adminID, name FROM admins WHERE email = '" . $conn->real_escape_string($email) . "'";
+                                $result = $conn->query($sql);
+                                $row = $result->fetch_assoc();
+                                $_SESSION['role'] = "admin";
+                                $_SESSION['adminID'] = $row['adminID'];
+                                $_SESSION['name'] = $row['name'];
+                                header("Location: admin.php");
+                            } else {
+                                // it is not an admin
+                                echo "<p>Invalid admin email.</p>";
+                            }
+                        }

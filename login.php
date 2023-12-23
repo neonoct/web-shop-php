@@ -38,7 +38,7 @@
             session_start();
             //if already specified in the session then no need to check again
             if (!isset($_SESSION['role'])) {
-                $_SESSION['role'] = "guest";
+                $_SESSION['role'] = 0;
             }
             
             // Database configuration
@@ -62,7 +62,7 @@
                 $password = $_POST['password'];
 
                 // Check if the user exists in the database
-                $sql = "SELECT email, password FROM logins WHERE email = '" . $conn->real_escape_string($email) . "'";
+                $sql = "SELECT email, password,role FROM logins WHERE email = '" . $conn->real_escape_string($email) . "'";
                 // if email is not in database not a registered user
                 // if email is in database and same email is in customers table then it is a registered user
                 // if email is in database and same email is not in customers table but in admins table then it is an admin
@@ -76,40 +76,28 @@
                         // Password matches, it is either a registered user or an admin
                         
                         $_SESSION['email'] = $email; // Store the email in the session as both admin and user have email
+                        $_SESSION['role'] = $row['role'];
                         //check if it is a registered user or admin
-                        $sql = "SELECT customerID, firstname, lastname, address FROM customers WHERE email = '" . $conn->real_escape_string($email) . "'";
-                        $result = $conn->query($sql);
-                        if ($result->num_rows > 0) {
-                            // it is a registered user
-                            //header("Location: products.php");
+                        if ($row['role'] == 2) {
+                            // Registered user
                             //fill the session with the customerID, firstname, lastname, address
+                            $sql = "SELECT customerID, firstname, lastname, address FROM customers WHERE email = '" . $conn->real_escape_string($email) . "'";
+                            $result = $conn->query($sql);
                             $row = $result->fetch_assoc();
-                            $_SESSION['role'] = "customer";
                             $_SESSION['customerID'] = $row['customerID'];
                             $_SESSION['firstname'] = $row['firstname'];
                             $_SESSION['lastname'] = $row['lastname'];
                             $_SESSION['address'] = $row['address'];
                             header("Location: myaccount.php");
-                        } else {
-                            // it is an admin
-                            //header("Location: admin.php");
-                            //check if it is really an admin by checking if it is in admins table
-                            $sql = "SELECT email FROM admins WHERE email = '" . $conn->real_escape_string($email) . "'";
+                        } else if ($row['role'] == 1) {
+                            // Admin
+                            //fill the session with the adminID, name
+                            $sql = "SELECT adminID, name FROM admins WHERE email = '" . $conn->real_escape_string($email) . "'";
                             $result = $conn->query($sql);
-                            if ($result->num_rows > 0) {
-                                // it is an admin
-                                //fill the session with the adminID,name
-                                $sql = "SELECT adminID, name FROM admins WHERE email = '" . $conn->real_escape_string($email) . "'";
-                                $result = $conn->query($sql);
-                                $row = $result->fetch_assoc();
-                                $_SESSION['role'] = "admin";
-                                $_SESSION['adminID'] = $row['adminID'];
-                                $_SESSION['name'] = $row['name'];
-                                header("Location: admin.php");
-                            } else {
-                                // it is not an admin
-                                echo "<p>Invalid admin email.</p>";
-                            }
+                            $row = $result->fetch_assoc();
+                            $_SESSION['adminID'] = $row['adminID'];
+                            $_SESSION['name'] = $row['name'];
+                            header("Location: admin.php");
                         }
                         exit();
                     } else {

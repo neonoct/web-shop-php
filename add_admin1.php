@@ -1,5 +1,5 @@
 <!-- add an admin to db -->
-
+<!-- role for admin = 1,for customer = 2 -->
 
 <?php
 //add an admin to db with hashed password
@@ -12,7 +12,7 @@ $password = "Lab2021";
 // Create connection
 $conn = new mysqli($host, $username, $password, $dbName);
 
-// Check connection
+// Check connectionn
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -20,11 +20,11 @@ if ($conn->connect_error) {
 //ad an admin to db
 
 // First, attempt to insert into logins table
-$adminname = "admin1";
-$adminemail = "admin1@email.com";
-$adminpassword = "admin1";
+$adminname = "admin2";
+$adminemail = "admin2@email.com";
+$adminpassword = "admin2";
 $adminpassword = password_hash($adminpassword, PASSWORD_DEFAULT);
-$loginSql = "INSERT INTO logins (email, password) VALUES ('$adminemail', '$adminpassword')";
+$loginSql = "INSERT INTO logins (email, password, role) VALUES ('$adminemail', '$adminpassword',1)";
 
 // Now, insert into admins table
 $adminSql = "INSERT INTO admins (email,active,name) VALUES ('$adminname', 1, '$adminname')";

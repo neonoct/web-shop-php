@@ -77,7 +77,7 @@
                 
 
                 // First, attempt to insert into logins table
-                $loginSql = "INSERT INTO logins (email, password) VALUES ('$email', '$password')";
+                $loginSql = "INSERT INTO logins (email, password, role) VALUES ('$email', '$password',2)";
                 
                 if ($conn->query($loginSql) === TRUE) {
                     // Now, insert into customers table
