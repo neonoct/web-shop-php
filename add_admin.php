@@ -1,4 +1,5 @@
 <!-- add an admin to db -->
+<!-- role for admin = 1,for customer = 2 -->
 
 
 <?php
@@ -32,7 +33,7 @@ if ($result->num_rows > 0) {
 $adminpassword = password_hash($adminpassword, PASSWORD_DEFAULT);
 
 // First, attempt to insert into logins table
-$loginSql = "INSERT INTO logins (email, password) VALUES ('$adminemail', '$adminpassword')";
+$loginSql = "INSERT INTO logins (email, password, role) VALUES ('$adminemail', '$adminpassword',1)";
 
 if ($conn->query($loginSql) === TRUE) {
     // Now, insert into admins table

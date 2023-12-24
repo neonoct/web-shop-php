@@ -24,9 +24,18 @@
     <main>
         <h2>Welcome to Our Webshop!</h2>
         <!-- Featured Products Section -->
-        <section class="featured-products">
-            <h3>Admin Page</h3>
-        </section>
+        <h3>Admin Page</h3>
+        <?php
+        session_start();
+        // display welcome admin if logged in
+        if (!empty($_SESSION['role']) && $_SESSION['role'] == 1) {
+            echo "<p>Welcome Admin ",$_SESSION['adminname'],"</p>";
+        } else {
+            echo "<p>Please login as admin to see this page</p>";
+        }
+
+        ?>
+
     </main>
 
     <footer>

@@ -1,3 +1,27 @@
+<?php
+session_start(); // Start the session
+
+// Check if the user is logged in and has the role attribute in the session
+if (isset($_SESSION['role'])) {
+    // Check if the user's role is 0
+    if ($_SESSION['role'] == 0) {
+        // Redirect to a different page if the user's role is 0
+        //alert the user that he is not authorized to see this page because he is not a registered user
+        echo "<script>alert('You are not authorized to see this page. Please login as a registered user.');</script>";
+        header("Location: login.php");
+        exit();
+    }
+} else {
+    // Redirect to the login page if the user is not logged in
+    //alert the user that he is not authorized to see this page because he is not logged in
+    echo "<script>alert('You are not authorized to see this page. Please login.');</script>";
+    header("Location: login.php");
+    exit();
+}
+
+// Rest of your page content goes here
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,20 +68,18 @@
             }
 
             //take the info from the session
-            session_start();
-            if (!empty($_SESSION['role'])){
-                $role = $_SESSION['role'];
-            } else {
-                $role = "guest";
-            }
+            $role = $_SESSION['role'];
 
-            if ($role == "admin") {
-                echo "<p>Welcome Admin</p>";
-            } else if ($role == "customer") {
-                echo "<p>Welcome Customer</p>";
-            } else {
-                echo "<p>Please login to see your account</p>";
-            }
+            if ($role == 1) {
+                echo "<p>Welcome Admin ",$_SESSION['adminname'],"</p>";
+                // link to admin page
+                echo "<a href='admin.php'>Admin Page</a>";
+            } else if ($role == 2) {
+                echo "<p>Welcome Customer ",$_SESSION['firstname'],"</p>";
+            } 
+
+            //add a link to logout
+            echo "<a href='logout.php'>Logout</a>";
             
 
         ?>

@@ -1,3 +1,4 @@
+<!-- use add_admin.php instead of this -->
 <!-- add an admin to db -->
 <!-- role for admin = 1,for customer = 2 -->
 

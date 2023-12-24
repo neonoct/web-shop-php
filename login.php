@@ -89,6 +89,9 @@
                             $_SESSION['lastname'] = $row['lastname'];
                             $_SESSION['address'] = $row['address'];
                             header("Location: myaccount.php");
+                            
+                            
+
                         } else if ($row['role'] == 1) {
                             // Admin
                             //fill the session with the adminID, name
@@ -96,7 +99,7 @@
                             $result = $conn->query($sql);
                             $row = $result->fetch_assoc();
                             $_SESSION['adminID'] = $row['adminID'];
-                            $_SESSION['name'] = $row['name'];
+                            $_SESSION['adminname'] = $row['name'];
                             header("Location: admin.php");
                         }
                         exit();
