@@ -60,11 +60,11 @@ if (!isset($_SESSION['role'])) {
             $role = $_SESSION['role'];
 
             if ($role == 1) {
-                echo "<p>Welcome Admin ",$_SESSION['adminname'],"</p>";
+                echo "<p>Welcome Admin ",$_SESSION['firstname'],' ',$_SESSION['lastname'],"</p>";
                 // link to admin page
                 echo "<a href='admin.php'>Admin Page</a>";
             } else if ($role == 2) {
-                echo "<p>Welcome Customer ",$_SESSION['firstname'],"</p>";
+                echo "<p>Welcome Customer ",$_SESSION['firstname'],' ',$_SESSION['lastname'],"</p>";
             } 
 
             //add a link to logout

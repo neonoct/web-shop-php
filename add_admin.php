@@ -18,32 +18,30 @@ if ($conn->connect_error) {
 }
 
 // Add an admin to the database
-$adminname = "admin1";
-$adminemail = "admin1@email.com";
-$adminpassword = "admin01.";
+$firstname = "admin1";
+$lastname = "admin";
+$email = "admin1@email.com";
+$password = "admin01.";
+$address = "";
 
 //if it is already on the database, it will not be added
-$checkSql = "SELECT * FROM admins WHERE email = '$adminemail'";
+$checkSql = "SELECT * FROM users WHERE email = '$email'";
 $result = $conn->query($checkSql);
 if ($result->num_rows > 0) {
     echo "<p>Admin already exists.</p>";
     exit();
 }
 
-$adminpassword = password_hash($adminpassword, PASSWORD_DEFAULT);
+$password = password_hash($password, PASSWORD_DEFAULT);
 
-// First, attempt to insert into logins table
-$loginSql = "INSERT INTO logins (email, password, role) VALUES ('$adminemail', '$adminpassword',1)";
 
-if ($conn->query($loginSql) === TRUE) {
-    // Now, insert into admins table
-    $adminSql = "INSERT INTO admins (name, active, email) VALUES ('$adminname', 1, '$adminemail')";
-    if ($conn->query($adminSql) === TRUE) {
-        echo "<p>Admin added successfully.</p>";
-    } else {
-        echo "Error: " . $adminSql . "<br>" . $conn->error;
-    }
+// Insert admin data into database table users(user_id	first_name	last_name	email	password	address	active	role) but just use the email and password active = 1, role = 1
+$sql = "INSERT INTO users (first_name, last_name, email, password, address, active, role) VALUES ('$firstname', '$lastname', '$email', '$password', '$address', 1, 1)";
+
+//if the query is successful
+if ($conn->query($sql) === TRUE) {
+    echo "<p>Admin added to database.</p>";
 } else {
-    echo "Error: " . $loginSql . "<br>" . $conn->error;
+    echo "<p>Error: " . $sql . "<br>" . $conn->error . "</p>";
 }
 ?>

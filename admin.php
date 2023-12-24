@@ -38,7 +38,7 @@
         <h3>Admin Page</h3>
         <?php
         // display welcome admin
-        echo "<p>Welcome Admin ",$_SESSION['adminname'],"</p>";
+        echo "<p>Welcome Admin ",$_SESSION['firstname'],' ',$_SESSION['lastname'],"</p>";
 
         ?>
 

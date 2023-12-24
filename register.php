@@ -62,36 +62,29 @@
                 $password = $_POST['password']; // Password should ideally be hashed before storing
 
                 //check if email is already in database
-                $sql = "SELECT email FROM logins WHERE email = '$email'";
+                $sql = "SELECT email FROM users WHERE email = '$email'";
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
                     echo "<script>alert('Email already in use.');</script>";
                     exit();
                 }
+            }else{
+                exit();
+            }
 
                 //hash the password using salt
                 $password = password_hash($password, PASSWORD_DEFAULT);
                 
                 
 
-                // First, attempt to insert into logins table
-                $loginSql = "INSERT INTO logins (email, password, role) VALUES ('$email', '$password',2)";
-                
-                if ($conn->query($loginSql) === TRUE) {
-                    // Now, insert into customers table
-                    $customerSql = "INSERT INTO customers (firstName, lastName, email, address, active) VALUES ('$firstname', '$lastname', '$email', '$address', 1)";
-            
-                    if ($conn->query($customerSql) === TRUE) {
-                        echo "<p>Registration successful.</p>";
-                    } else {
-                        echo "Error: " . $customerSql . "<br>" . $conn->error;
-                    }
+                // Insert data into database table users(user_id	first_name	last_name	email	password	address	active	role)
+                $sql = "INSERT INTO users (first_name, last_name, email, password, address, active, role) VALUES ('$firstname', '$lastname', '$email', '$password', '$address', 1, 2)";
+                //if the query is successful
+                if ($conn->query($sql) === TRUE) {
+                    echo "<p>Registration successful.</p>";
                 } else {
-                    // Handle the error if insertion into logins fails
-                    echo "Error: " . $loginSql . "<br>" . $conn->error;
+                    echo "<p>Error: " . $sql . "<br>" . $conn->error . "</p>";
                 }
-            }
-            
 
             $conn->close();
             ?>

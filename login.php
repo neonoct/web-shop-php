@@ -55,38 +55,33 @@
                 $email = $_POST['email'];
                 $password = $_POST['password'];
                 // Check if the user exists in the database
-                $sql = "SELECT email, password,role FROM logins WHERE email = '" . $conn->real_escape_string($email) . "'";
+                $sql = "SELECT role, password FROM users WHERE email = '" . $conn->real_escape_string($email) . "'";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
                     // User exists, now check if the password matches
                     $row = $result->fetch_assoc();
                     if (password_verify($password, $row['password'])) {
-                        // Password matches, it is either a registered user or an admin
-                        $_SESSION['email'] = $email; // Store the email in the session as both admin and user have email
-                        $_SESSION['role'] = $row['role'];
+                        // Password is correct, so start a new session
+                        session_start();
+                        // Store data in session variables
+                        $_SESSION["loggedin"] = true;
+                        $_SESSION["email"] = $email;
+                        $_SESSION["role"] = $row['role'];
+                        $_SESSION["firstname"] = $row['first_name'];
+                        $_SESSION["lastname"] = $row['last_name'];
+                        $_SESSION["address"] = $row['address'];
+                        $_SESSION["active"] = $row['active'];
+                        $_SESSION["user_id"] = $row['user_id'];
                         //check if it is a registered user or admin
-                        if ($row['role'] == 2) {
-                            // Registered user
-                            //fill the session with the customerID, firstname, lastname, address
-                            $sql = "SELECT customerID, firstname, lastname, address FROM customers WHERE email = '" . $conn->real_escape_string($email) . "'";
-                            $result = $conn->query($sql);
-                            $row = $result->fetch_assoc();
-                            $_SESSION['customerID'] = $row['customerID'];
-                            $_SESSION['firstname'] = $row['firstname'];
-                            $_SESSION['lastname'] = $row['lastname'];
-                            $_SESSION['address'] = $row['address'];
-                            header("Location: myaccount.php");
-                        } else if ($row['role'] == 1) {
-                            // Admin
-                            //fill the session with the adminID, name
-                            $sql = "SELECT adminID, name FROM admins WHERE email = '" . $conn->real_escape_string($email) . "'";
-                            $result = $conn->query($sql);
-                            $row = $result->fetch_assoc();
-                            $_SESSION['adminID'] = $row['adminID'];
-                            $_SESSION['adminname'] = $row['name'];
-                            header("Location: admin.php");
+                        if ($row['role'] == 1) {
+                            // Redirect user to admin page
+                            header("location: admin.php");
+                        } else {
+                            // Redirect user to myaccount page
+                            header("location: myaccount.php");
                         }
+
                         exit();
                     } else {
                         // Password doesn't match
