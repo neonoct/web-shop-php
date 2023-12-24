@@ -58,17 +58,25 @@ if (!isset($_SESSION['role'])) {
 
             //take the info from the session
             $role = $_SESSION['role'];
+            $firstname = $_SESSION['firstname'];
 
+            $lastname = $_SESSION['lastname'];
             if ($role == 1) {
-                echo "<p>Welcome Admin ",$_SESSION['firstname'],' ',$_SESSION['lastname'],"</p>";
+                echo "<p>Welcome Admin ",$firstname,' ',$lastname,"</p>";
                 // link to admin page
                 echo "<a href='admin.php'>Admin Page</a>";
             } else if ($role == 2) {
-                echo "<p>Welcome Customer ",$_SESSION['firstname'],' ',$_SESSION['lastname'],"</p>";
+                echo "<p>Welcome Customer ",$firstname,' ',$lastname,"</p>";
+                // display the customer's info
+                $email = $_SESSION['email'];
+                $address = $_SESSION['address'];
+                echo "<p>Email: ",$email,"</p>";
+                echo "<p>Address: ",$address,"</p>";
+
             } 
 
             //add a link to logout
-            echo "<a href='logout.php'>Logout</a>";
+            echo "<form action='logout.php' method='POST'><button type='submit'>Logout</button></form>";
             
 
         ?>

@@ -55,7 +55,7 @@
                 $email = $_POST['email'];
                 $password = $_POST['password'];
                 // Check if the user exists in the database
-                $sql = "SELECT role, password FROM users WHERE email = '" . $conn->real_escape_string($email) . "'";
+                $sql = "SELECT user_id,first_name,last_name,address,role, password FROM users WHERE email = '" . $conn->real_escape_string($email) . "'";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -92,6 +92,8 @@
                     echo "<p>Invalid email.</p>";
                 }
 
+            }else{
+                exit();
             }
 
             $conn->close();

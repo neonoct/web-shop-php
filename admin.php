@@ -39,6 +39,8 @@
         <?php
         // display welcome admin
         echo "<p>Welcome Admin ",$_SESSION['firstname'],' ',$_SESSION['lastname'],"</p>";
+        // logout button
+        echo "<form action='logout.php' method='POST'><button type='submit'>Logout</button></form>";
 
         ?>
 

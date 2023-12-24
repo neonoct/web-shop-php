@@ -1,3 +1,17 @@
+<?php
+        session_start();
+        // display welcome admin if logged in        
+        // If the user is not logged in or their role is not 1, redirect them.
+        if (!empty($_SESSION['role']) && ($_SESSION['role'] == 1 || $_SESSION['role'] == 2)) {
+            echo "<script>alert('You are already registered and logged. If you want to register another account logout first.'); window.location.href='myaccount.php';</script>";
+             // i would use header("Location: login.php"); but in this case 
+            //before alerting the user it is redirecting to login.php and not showing the alert
+            //so i found this code with window.location.href='login.php' and it is working 
+            exit();
+        }
+?>
+        
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
