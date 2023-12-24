@@ -36,11 +36,7 @@
 
         <?php
             session_start();
-            //if already specified in the session then no need to check again
-            if (!isset($_SESSION['role'])) {
-                $_SESSION['role'] = 0;
-            }
-            
+            //if already specified in the session then no need to check again           
             // Database configuration
             $host     = "localhost";
             $dbName   = "shopDb";

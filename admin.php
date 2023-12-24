@@ -1,3 +1,19 @@
+<?php
+        session_start();
+        // display welcome admin if logged in        
+        // If the user is not logged in or their role is not 1, redirect them.
+        if (empty($_SESSION['role']) || $_SESSION['role'] != 1) {
+            echo "<script>alert('You are not authorized to see this page. Please login.'); window.location.href='login.php';</script>"; // i would use header("Location: login.php"); but in this case 
+            //before alerting the user it is redirecting to login.php and not showing the alert
+            //so i found this code with window.location.href='login.php' and it is working 
+            exit();
+        }
+        
+        // The rest of your protected page content goes here
+        ?>
+        
+
+        ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,13 +42,8 @@
         <!-- Featured Products Section -->
         <h3>Admin Page</h3>
         <?php
-        session_start();
-        // display welcome admin if logged in
-        if (!empty($_SESSION['role']) && $_SESSION['role'] == 1) {
-            echo "<p>Welcome Admin ",$_SESSION['adminname'],"</p>";
-        } else {
-            echo "<p>Please login as admin to see this page</p>";
-        }
+        // display welcome admin
+        echo "<p>Welcome Admin ",$_SESSION['adminname'],"</p>";
 
         ?>
 

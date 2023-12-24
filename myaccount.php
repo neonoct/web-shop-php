@@ -2,22 +2,15 @@
 session_start(); // Start the session
 
 // Check if the user is logged in and has the role attribute in the session
-if (isset($_SESSION['role'])) {
-    // Check if the user's role is 0
-    if ($_SESSION['role'] == 0) {
-        // Redirect to a different page if the user's role is 0
-        //alert the user that he is not authorized to see this page because he is not a registered user
-        echo "<script>alert('You are not authorized to see this page. Please login as a registered user.');</script>";
-        header("Location: login.php");
-        exit();
-    }
-} else {
-    // Redirect to the login page if the user is not logged in
-    //alert the user that he is not authorized to see this page because he is not logged in
-    echo "<script>alert('You are not authorized to see this page. Please login.');</script>";
-    header("Location: login.php");
+if (!isset($_SESSION['role'])) {
+    //alert the user that he is not authorized to see this page because he is not a registered user
+    // i would use header("Location: login.php"); but in this case
+    //before alerting the user it is redirecting to login.php and not showing the alert
+    //so i found this code with window.location.href='login.php' and it is working 
+    echo "<script>alert('You are not authorized to see this page. Please login as a registered user.'); window.location.href='index.php';</script>";
     exit();
-}
+
+} 
 
 // Rest of your page content goes here
 ?>
