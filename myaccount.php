@@ -7,12 +7,11 @@ if (!isset($_SESSION['role'])) {
     // i would use header("Location: login.php"); but in this case
     //before alerting the user it is redirecting to login.php and not showing the alert
     //so i found this code with window.location.href='login.php' and it is working 
-    echo "<script>alert('You are not authorized to see this page. Please login as a registered user.'); window.location.href='index.php';</script>";
+    echo "<script>alert('You are not authorized to see this page. Please login as a registered user.'); window.location.href='login.php';</script>";
     exit();
 
 } 
 
-// Rest of your page content goes here
 ?>
 
 <!DOCTYPE html>
@@ -42,9 +41,6 @@ if (!isset($_SESSION['role'])) {
         <h2>Welcome to Our Webshop!</h2>
         <h3>My account page</h3>
         <?php
-            //if user is logged in echo welcome 'customer name'
-            //if admin is logged in echo welcome 'admin name'
-            //if user is not logged in echo 'please login to see your account'
 
             // Database configuration
             $host     = "localhost";

@@ -4,12 +4,11 @@ session_start(); // Start the session
 // Check if the user is logged in and has the role attribute in the session
 if (!isset($_SESSION['role'])) {
     // same goes for here as in myaccount.php 
-    echo "<script>alert('You are not authorized to see this page. Please login as a registered user.'); window.location.href='index.php';</script>";
+    echo "<script>alert('You are not authorized to see this page. Please login as a registered user.'); window.location.href='products.php';</script>";
     exit();
     
 } 
 
-// Rest of your page content goes here
 ?>
 
 <!DOCTYPE html>

@@ -8,12 +8,8 @@
             //so i found this code with window.location.href='login.php' and it is working 
             exit();
         }
+?>
         
-        // The rest of your protected page content goes here
-        ?>
-        
-
-        ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,7 +35,6 @@
 
     <main>
         <h2>Welcome to Our Webshop!</h2>
-        <!-- Featured Products Section -->
         <h3>Admin Page</h3>
         <?php
         // display welcome admin

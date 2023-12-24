@@ -26,8 +26,7 @@
         <form id="registrationForm" class="register-form" method="POST">
             <input type="text" id="firstname" name="firstname" placeholder="firstname" >
             <input type="text" id="lastname" name="lastname" placeholder="lastname" >
-            <input type="text" id="email" name="email" placeholder="Email" ><!-- because checking with js changed input type to text -->
-            <!-- address -->
+            <input type="text" id="email" name="email" placeholder="Email" ><!-- because i am checking with js,changed input type to text from email -->
             <input type="text" id="address" name="address" placeholder="Address" >
             <input type="password" id="password" name="password" placeholder="Password" >
             <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" >
@@ -48,7 +47,6 @@
 
             // Create connection
             $conn = new mysqli($host, $username, $password, $dbName);
-            //echo "<script>alert('viyyy0.');</script>";
             // Check connection
             if ($conn->connect_error) {
                 die("Connection failed: " . $conn->connect_error);

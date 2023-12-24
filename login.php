@@ -24,7 +24,6 @@
     <main>
         <h2>Welcome to Our Webshop!</h2>
         <form id="loginForm" class="login-form" method="POST">
-            <!-- <input type="text" id="loginUsername" name="username" placeholder="Username" required> change this with email-->
             <input type="email" id="loginEmail" name="email" placeholder="Email" required>
             <input type="password" id="loginPassword" name="password" placeholder="Password" required>
             <button type="submit">Login</button>
@@ -45,7 +44,6 @@
 
             // Create connection
             $conn = new mysqli($host, $username, $password, $dbName);
-            //echo "<script>alert('viyyy0.');</script>";
             // Check connection
             if ($conn->connect_error) {
                 die("Connection failed: " . $conn->connect_error);
@@ -56,13 +54,8 @@
                 // Retrieve form data
                 $email = $_POST['email'];
                 $password = $_POST['password'];
-
                 // Check if the user exists in the database
                 $sql = "SELECT email, password,role FROM logins WHERE email = '" . $conn->real_escape_string($email) . "'";
-                // if email is not in database not a registered user
-                // if email is in database and same email is in customers table then it is a registered user
-                // if email is in database and same email is not in customers table but in admins table then it is an admin
-
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -70,7 +63,6 @@
                     $row = $result->fetch_assoc();
                     if (password_verify($password, $row['password'])) {
                         // Password matches, it is either a registered user or an admin
-                        
                         $_SESSION['email'] = $email; // Store the email in the session as both admin and user have email
                         $_SESSION['role'] = $row['role'];
                         //check if it is a registered user or admin
@@ -85,9 +77,6 @@
                             $_SESSION['lastname'] = $row['lastname'];
                             $_SESSION['address'] = $row['address'];
                             header("Location: myaccount.php");
-                            
-                            
-
                         } else if ($row['role'] == 1) {
                             // Admin
                             //fill the session with the adminID, name
@@ -104,7 +93,7 @@
                         echo "<p>Invalid password.</p>";
                     }
                 } else {
-                    // Password doesn't match with email
+                    // User doesn't exist
                     echo "<p>Invalid email.</p>";
                 }
 
