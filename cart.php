@@ -54,11 +54,11 @@ if (!isset($_SESSION['role'])) {
             }
 
             if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
-                foreach ($_SESSION['cart'] as $productID) {
+                foreach ($_SESSION['cart'] as $productID => $quantity) {
                     // Retrieve product details
                     $sql = "SELECT productid, productName, productPrice, description, imageUrl FROM products WHERE productid = '" . $conn->real_escape_string($productID) . "'";
                     $result = $conn->query($sql);
-
+                
                     if ($result->num_rows > 0) {
                         // Display product details
                         while($row = $result->fetch_assoc()) {
@@ -67,6 +67,7 @@ if (!isset($_SESSION['role'])) {
                             echo "<h4>" . $row['productName'] . "</h4>";
                             echo "<p>" . $row['description'] . "</p>";
                             echo "<p>Price: " . $row['productPrice'] . "</p>";
+                            echo "<p>Quantity: " . $quantity . "</p>";
                             echo "</div>";
                         }
                     } else {

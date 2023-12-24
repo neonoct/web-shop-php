@@ -6,9 +6,18 @@ if (!isset($_SESSION['cart'])) {
 }
 
 if (isset($_POST['productID'])) {
-    array_push($_SESSION['cart'], $_POST['productID']);
+    if (!isset($_SESSION['role'])) {
+        echo "<script type='text/javascript'>alert('You must be logged in to add products to the cart.'); window.location.href = 'login.php';</script>";
+    } else {
+        if (isset($_SESSION['cart'][$_POST['productID']])) {
+            $_SESSION['cart'][$_POST['productID']]++;
+        } else {
+            $_SESSION['cart'][$_POST['productID']] = 1;
+        }
+    }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
