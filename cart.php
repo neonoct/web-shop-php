@@ -17,7 +17,7 @@ if (!isset($_SESSION['role'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webshop Home</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cart.css">
 </head>
 <body>
     <header>
@@ -36,10 +36,47 @@ if (!isset($_SESSION['role'])) {
 
     <main>
         <h2>Welcome to Our Webshop!</h2>
-        <!-- Featured Products Section -->
-        <section class="featured-products">
-            <h3>Cart</h3>
-        </section>
+        <h3>Cart</h3>
+            <?php
+
+            // Database configuration
+            $host     = "localhost";
+            $dbName   = "shopDb";
+            $username = "Webuser";
+            $password = "Lab2021";
+
+            // Create connection
+            $conn = new mysqli($host, $username, $password, $dbName);
+
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+                foreach ($_SESSION['cart'] as $productID) {
+                    // Retrieve product details
+                    $sql = "SELECT productid, productName, productPrice, description, imageUrl FROM products WHERE productid = '" . $conn->real_escape_string($productID) . "'";
+                    $result = $conn->query($sql);
+
+                    if ($result->num_rows > 0) {
+                        // Display product details
+                        while($row = $result->fetch_assoc()) {
+                            echo "<div class='product'>";
+                            echo "<img src='" . $row['imageUrl'] . "' alt='" . $row['productName'] . "'>";
+                            echo "<h4>" . $row['productName'] . "</h4>";
+                            echo "<p>" . $row['description'] . "</p>";
+                            echo "<p>Price: " . $row['productPrice'] . "</p>";
+                            echo "</div>";
+                        }
+                    } else {
+                        echo "No products found.";
+                    }
+                }
+            } else {
+                echo "Your cart is empty.";
+            }
+            ?>
     </main>
 
     <footer>

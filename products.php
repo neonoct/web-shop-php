@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = array();
+}
+
+if (isset($_POST['productID'])) {
+    array_push($_SESSION['cart'], $_POST['productID']);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,13 +78,16 @@
                     if ($result->num_rows > 0) {
                         // Output data of each row
                         while($row = $result->fetch_assoc()) {
+                            echo '<form method="post" action="products.php">';
                             echo '<div class="product-item">';
                             echo '<img src="' . $row["imageUrl"] . '" alt="' . $row["productName"] . '">';
                             echo '<h4>' . $row["productName"] . '</h4>';
                             echo '<p class="description" >' . $row["description"] . '</p>';
                             echo '<p class="price">Price: $' . $row["productPrice"] . '</p>';
-                            echo '<button>Add to Cart</button>';
+                            echo '<input type="hidden" name="productID" value="' . $row["productID"] . '">';
+                            echo '<button type="submit">Add to Cart</button>';
                             echo '</div>';
+                            echo '</form>';
                         }
                     } else {
                         echo "0 results";
