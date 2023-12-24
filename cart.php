@@ -52,32 +52,43 @@ if (!isset($_SESSION['role'])) {
             if ($conn->connect_error) {
                 die("Connection failed: " . $conn->connect_error);
             }
-
+            echo "<div class='flex-container'>";
             if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
                 foreach ($_SESSION['cart'] as $productID => $quantity) {
                     // Retrieve product details
                     $sql = "SELECT productid, productName, productPrice, description, imageUrl FROM products WHERE productid = '" . $conn->real_escape_string($productID) . "'";
                     $result = $conn->query($sql);
-                
+                    
                     if ($result->num_rows > 0) {
                         // Display product details
                         while($row = $result->fetch_assoc()) {
-                            echo "<div class='product'>";
+                            echo "<div>";
                             echo "<img src='" . $row['imageUrl'] . "' alt='" . $row['productName'] . "'>";
                             echo "<h4>" . $row['productName'] . "</h4>";
                             echo "<p>" . $row['description'] . "</p>";
                             echo "<p>Price: " . $row['productPrice'] . "</p>";
-                            echo "<p>Quantity: " . $quantity . "</p>";
+                            echo "<form method='post' action='update_cart.php' id='updateForm" . $productID . "'>";
+                            echo "<input type='number' name='quantity' value='" . $quantity . "' onchange='document.getElementById(\"updateForm" . $productID . "\").submit();'>";
+                            echo "<input type='hidden' name='productID' value='" . $productID . "'>";                           
+                            echo "</form>";
+                            echo "<form method='post' action='update_cart.php'>";
+                            echo "<input type='hidden' name='productID' value='" . $productID . "'>";
+                            echo "<input type='hidden' name='remove' value='1'>";
+                            echo "<input type='submit' value='Remove'>";
+                            echo "</form>";
                             echo "</div>";
                         }
                     } else {
                         echo "No products found.";
                     }
+                    
                 }
             } else {
                 echo "Your cart is empty.";
             }
+            echo "</div>";
             ?>
+
     </main>
 
     <footer>
