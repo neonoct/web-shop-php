@@ -55,12 +55,17 @@
                 $email = $_POST['email'];
                 $password = $_POST['password'];
                 // Check if the user exists in the database
-                $sql = "SELECT user_id,first_name,last_name,address,role, password FROM users WHERE email = '" . $conn->real_escape_string($email) . "'";
+                $sql = "SELECT user_id,first_name,last_name,address,role, password, active FROM users WHERE email = '" . $conn->real_escape_string($email) . "'";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
                     // User exists, now check if the password matches
                     $row = $result->fetch_assoc();
+                    // if user is not active then do not login
+                    if ($row['active'] == 0) {
+                        echo "<p>User is not active.</p>";
+                        exit();
+                    }
                     if (password_verify($password, $row['password'])) {
                         // Password is correct, so start a new session
                         session_start();
