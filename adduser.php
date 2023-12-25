@@ -1,21 +1,7 @@
+
 <?php
-
-
-// Database configuration
-$host     = "localhost";
-$dbName   = "shopDb";
-$username = "Webuser";
-$password = "Lab2021";
-
-// Create connection
-$conn = new mysqli($host, $username, $password, $dbName);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-//take the info from the session
+include 'db.php';
+$conn = connectToDb();
 
 $firstname = $_POST['firstname'];
 $lastname = $_POST['lastname'];

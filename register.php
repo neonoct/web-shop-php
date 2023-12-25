@@ -48,6 +48,12 @@
         </form>
 
         <script src="checkregisterfields.js"></script>
+        <script>
+        // When the document is fully loaded, attach the validation to the form
+        document.addEventListener('DOMContentLoaded', function() {
+            checkregisterfields('registrationForm');
+        });
+    </script>
         
         <!-- now save to database if the checkfields.js is ok -->
 
