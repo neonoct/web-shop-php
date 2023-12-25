@@ -20,7 +20,7 @@ if (!isset($_SESSION['role'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webshop Home</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="myaccount.css">
 </head>
 <body>
     <header>
@@ -74,6 +74,43 @@ if (!isset($_SESSION['role'])) {
                 echo "<p>Address: ",$address,"</p>";
 
             } 
+
+            //display the orders of the customer,display the order id,date from orders table and the products from ordersproducts table and  the total price from payments table
+            $customerID = $_SESSION['user_id'];
+            $sql = "SELECT * FROM orders WHERE customerId = $customerID";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                echo "<table><tr><th>Order ID</th><th>Date</th><th>Products</th><th>Total Price</th></tr>";
+                while($row = $result->fetch_assoc()) {
+                    $orderID = $row["orderId"];
+                    $date = $row["date"];
+                    $sql = "SELECT * FROM ordersproducts WHERE orderId = $orderID";
+                    $result2 = $conn->query($sql);
+                    $products = "";
+                    $totalPrice = 0;
+                    while($row2 = $result2->fetch_assoc()) {
+                        $productID = $row2["productId"];
+                        $quantity = $row2["quantity"];
+                        $sql = "SELECT * FROM products WHERE productID = $productID";
+                        $result3 = $conn->query($sql);
+                        while($row3 = $result3->fetch_assoc()) {
+                            $productName = $row3["productName"];
+                            $productPrice = $row3["productPrice"];
+                            $totalPrice += $productPrice * $quantity;
+                            $products .= $productName . " x" . $quantity . " ";
+                        }
+                    }
+                    $sql = "SELECT * FROM payments WHERE orderId = $orderID";
+                    $result2 = $conn->query($sql);
+                    while($row2 = $result2->fetch_assoc()) {
+                        $amount = $row2["amount"];
+                    }
+                    echo "<tr><td>$orderID</td><td>$date</td><td>$products</td><td>$amount</td></tr>";
+                }
+                echo "</table>";
+            } else {
+                echo "0 results";
+            }
 
             //add a link to logout
             echo "<form action='logout.php' method='POST'><button type='submit'>Logout</button></form>";
