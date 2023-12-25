@@ -53,6 +53,8 @@ if (!isset($_SESSION['role'])) {
                 die("Connection failed: " . $conn->connect_error);
             }
             echo "<div class='flex-container'>";
+            $totalItems = 0;
+            $totalPrice = 0.0;
             if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
                 foreach ($_SESSION['cart'] as $productID => $quantity) {
                     // Retrieve product details
@@ -77,6 +79,8 @@ if (!isset($_SESSION['role'])) {
                             echo "<input type='submit' value='Remove'>";
                             echo "</form>";
                             echo "</div>";
+                            $totalItems += $quantity;
+                            $totalPrice += $row['productPrice'] * $quantity;
                         }
                     } else {
                         echo "No products found.";
@@ -87,6 +91,15 @@ if (!isset($_SESSION['role'])) {
                 echo "Your cart is empty.";
             }
             echo "</div>";
+
+
+            echo "<p>Total items in basket: " . $totalItems . "</p>";
+            echo "<p>Total: " . $totalPrice . "</p>";
+            $_SESSION['totalPrice'] = $totalPrice;
+
+            echo "<form method='post' action='payment.php'>";
+            echo "<input type='submit' value='Proceed to Payment'>";
+            echo "</form>";
             ?>
 
     </main>
