@@ -80,10 +80,20 @@
         $result = $conn->query($sql);
         echo "<h3>Products</h3>";
         echo "<table>";
-        echo "<tr><th>ProductID</th><th>Product Name</th><th>Description</th><th>Price</th><th>Category</th><th>Remove</th><th>Edit</th></tr>";
+        echo "<tr><th>ProductID</th><th>Product Name</th><th>Description</th><th>Price</th><th>Category</th><th>ImageURL</th><th>Remove</th><th>Edit</th></tr>";
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
-                echo "<tr><td>".$row["productId"]."</td><td>".$row["productName"]."</td><td>".$row["description"]."</td><td>".$row["productPrice"]."</td><td>".$row["categoryId"]."</td><td><form action='removeproduct.php' method='POST'><button type='submit' name='remove' value='".$row["productId"]."'>Remove</button></form></td><td><form action='editproduct.php' method='POST'><button type='submit' name='edit' value='".$row["productId"]."'>Edit</button></form></td></tr>";
+
+                echo "<tr><td>".$row["productId"]."</td><td>".$row["productName"]."</td><td>".$row["description"]."</td><td>".$row["productPrice"]."</td><td>".$row["categoryId"]."</td><td>".$row["imageUrl"]."</td><td><form action='removeproduct.php' method='POST'><button type='submit' name='remove' value='".$row["productId"]."'>Remove</button></form></td><td><form id='edit' method='POST'><button type='submit' name='edit' value='".$row["productId"]."'>Edit</button></form></td></tr>";
+                
+                if(isset($_POST['edit']) && $_POST['edit'] == $row["productId"]){
+                    echo "<form action='editproduct.php' method='POST'>";
+                    //alert imageurl
+                    #$x=$row["imageUrl"];
+                    #echo "<script>alert('Image URL is $x') </script>";
+                    echo  "<tr><td><input type='hidden' name='productId' value='".$row["productId"]."'>".$row["productId"]."</td><td><input type='text' name='productName' value='".$row["productName"]."'></td><td><input type='text' id='description' name='description' value='".$row["description"]."'></td><td><input type='text' name='productPrice' value='".$row["productPrice"]."'></td><td><input type='text' name='categoryId' value='".$row["categoryId"]."'></td><td><input type='text' name='imageUrl' value='".$row["imageUrl"]."'></td><td><button type='submit' name='save' value='".$row["productId"]."'>Save</button></td></tr>";
+                    echo "</form>";
+                }
             }
         }
         echo "</table>";
@@ -105,6 +115,5 @@
     <footer>
         <p>Contact Us: contact@frk-tech.com</p>
     </footer>
-
 </body>
 </html>

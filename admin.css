@@ -70,6 +70,20 @@ th, td {
     border-bottom: 1px solid #ddd;
 }
 
+/* maximum td should be 100px */
+td {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+table input[type='text'] {
+    width: 100%;
+}
+
+
+
 tr:hover {
     background-color: #f5f5f5;
 }
@@ -82,6 +96,8 @@ input[type=text], textarea,input[type=password],#role{
     border-radius: 4px;
     resize: vertical;
 }
+
+
 
 h3{
     margin-top: 20px;
