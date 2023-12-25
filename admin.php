@@ -16,7 +16,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webshop Home</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin.css">
 </head>
 <body>
     <header>
@@ -41,7 +41,76 @@
         echo "<p>Welcome Admin ",$_SESSION['firstname'],' ',$_SESSION['lastname'],"</p>";
         // logout button
         echo "<form action='logout.php' method='POST'><button type='submit'>Logout</button></form>";
+        //make a table with all the users and their info so that the admin can remove or add that user
+        // Database configuration
+        $host     = "localhost";
+        $dbName   = "shopDb";
+        $username = "Webuser";
+        $password = "Lab2021";
 
+        // Create connection
+        $conn = new mysqli($host, $username, $password, $dbName);
+
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        //take the info from the session
+
+        $sql = "SELECT * FROM users WHERE active = 1";
+        $result = $conn->query($sql);
+        echo "<h3>Users</h3>";
+        echo "<table>";
+        echo "<tr><th>UserID</th><th>Firstname</th><th>Lastname</th><th>Email</th><th>Address</th><th>Role</th><th>Remove</th></tr>";
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                echo "<tr><td>".$row["user_id"]."</td><td>".$row["first_name"]."</td><td>".$row["last_name"]."</td><td>".$row["email"]."</td><td>".$row["address"]."</td><td>".$row["role"]."</td><td><form action='removeuser.php' method='POST'><button type='submit' name='remove' value='".$row["user_id"]."'>Remove</button></form></td></tr>";
+            }
+        }
+        echo "</table>";
+        //add a user
+        $adduserstring= "<form action='adduser.php' method='POST'><input type='text' name='firstname' placeholder='Firstname'><input type='text' name='lastname' placeholder='Lastname'>";
+        $adduserstring.="<input type='text' name='email' placeholder='Email'><input type='password' name='password' placeholder='Password'><input type='password' name='confirmpassword' placeholder='Password'><input type='text' name='address' placeholder='Address'>";
+        $adduserstring.="<select name='role'><option value='user'>User</option><option value='admin'>Admin</option></select>";
+        $adduserstring.="<button type='submit' name='add' value='add'>Add User</button></form>";
+        echo $adduserstring;
+        $conn->close();
+
+        //make a table with all the products and their info so that the admin can remove, add or edit that product
+        // Database configuration
+        $host     = "localhost";
+        $dbName   = "shopDb";
+        $username = "Webuser";
+        $password = "Lab2021";
+
+        // Create connection
+        $conn = new mysqli($host, $username, $password, $dbName);
+
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        //take the info from the session
+
+        $sql = "SELECT * FROM products WHERE active = 1";
+        $result = $conn->query($sql);
+        echo "<h3>Products</h3>";
+        echo "<table>";
+        echo "<tr><th>ProductID</th><th>Product Name</th><th>Price</th><th>Category</th><th>Remove</th><th>Edit</th></tr>";
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                echo "<tr><td>".$row["productId"]."</td><td>".$row["productName"]."</td><td>".$row["productPrice"]."</td><td>".$row["categoryId"]."</td><td><form action='removeproduct.php' method='POST'><button type='submit' name='remove' value='".$row["productId"]."'>Remove</button></form></td><td><form action='editproduct.php' method='POST'><button type='submit' name='edit' value='".$row["productId"]."'>Edit</button></form></td></tr>";
+            }
+        }
+        echo "</table>";
+
+
+
+
+
+   
         ?>
 
     </main>
