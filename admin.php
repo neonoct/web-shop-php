@@ -83,9 +83,24 @@
         echo "<tr><th>ProductID</th><th>Product Name</th><th>Description</th><th>Price</th><th>Category</th><th>ImageURL</th><th>Remove</th><th>Edit</th></tr>";
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
-
-                echo "<tr><td>".$row["productId"]."</td><td>".$row["productName"]."</td><td>".$row["description"]."</td><td>".$row["productPrice"]."</td><td>".$row["categoryId"]."</td><td>".$row["imageUrl"]."</td><td><form action='removeproduct.php' method='POST'><button type='submit' name='remove' value='".$row["productId"]."'>Remove</button></form></td><td><form id='edit' method='POST'><button type='submit' name='edit' value='".$row["productId"]."'>Edit</button></form></td></tr>";
+                //if category is 1 then it is a laptop if 2 then it is a desktop if 3 then it is a accessory
+                if($row["categoryId"]==1){
+                    $cat="Laptop";
+                }
+                else if($row["categoryId"]==2){
+                    $cat="Desktop";
+                }
+                else if($row["categoryId"]==3){
+                    $cat="Accessory";
+                }
+                else{
+                    $cat="Unknown";
+                }
                 
+                $productstring ="<tr><td>".$row["productId"]."</td><td>".$row["productName"]."</td><td>".$row["description"]."</td><td>".$row["productPrice"]."</td><td>".$row["categoryId"]."(".$cat.")"."</td>";
+                $productstring .="<td>".$row["imageUrl"]."</td><td><form action='removeproduct.php' method='POST'><button type='submit' name='remove' value='".$row["productId"]."'>Remove</button>";
+                $productstring .="</form></td><td><form id='edit' method='POST'><button type='submit' name='edit' value='".$row["productId"]."'>Edit</button></form></td></tr>";
+                echo $productstring;
                 if(isset($_POST['edit']) && $_POST['edit'] == $row["productId"]){
                     echo "<form action='editproduct.php' method='POST'>";
                     //alert imageurl
