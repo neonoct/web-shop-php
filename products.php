@@ -1,21 +1,35 @@
 <?php
 include 'db.php';
-session_start();
 
-if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = array();
-}
+function displayProducts(){
+    $conn = connectToDb(); //connect to the database
+    // SQL query to select all active products
+    $sql = "SELECT productID, productName, description, productPrice, imageUrl FROM products WHERE active = 1";
+    $result = $conn->query($sql);
 
-if (isset($_POST['productID'])) {
-    if (!isset($_SESSION['role'])) {
-        echo "<script type='text/javascript'>alert('You must be logged in to add products to the cart.'); window.location.href = 'login.php';</script>";
-    } else {
-        if (isset($_SESSION['cart'][$_POST['productID']])) {
-            $_SESSION['cart'][$_POST['productID']]++;
-        } else {
-            $_SESSION['cart'][$_POST['productID']] = 1;
+    // Check if there are results
+    if ($result->num_rows > 0) {
+        // Output data of each row
+        while($row = $result->fetch_assoc()) {
+            echo '<form method="post" action="process.php">';
+            echo '<input type="hidden" name="form_type" value="form12">';
+            echo '<div class="product-item">';
+            echo '<img src="' . $row["imageUrl"] . '" alt="' . $row["productName"] . '">';
+            echo '<h4>' . $row["productName"] . '</h4>';
+            echo '<p class="description" >' . $row["description"] . '</p>';
+            echo '<p class="price">Price: $' . $row["productPrice"] . '</p>';
+            echo '<input type="hidden" name="productID" value="' . $row["productID"] . '">';
+            echo '<button type="submit">Add to Cart</button>';
+            echo '</div>';
+            echo '</form>';
         }
+    } else {
+        echo "0 results";
     }
+
+    // Close connection
+    $conn->close();
+
 }
 ?>
 
@@ -66,33 +80,7 @@ if (isset($_POST['productID'])) {
             
             <div class="product-container" >
                 <?php
-                    $conn = connectToDb(); //connect to the database
-
-                    // SQL query to select all active products
-                    $sql = "SELECT productID, productName, description, productPrice, imageUrl FROM products WHERE active = 1";
-                    $result = $conn->query($sql);
-
-                    // Check if there are results
-                    if ($result->num_rows > 0) {
-                        // Output data of each row
-                        while($row = $result->fetch_assoc()) {
-                            echo '<form method="post" action="products.php">';
-                            echo '<div class="product-item">';
-                            echo '<img src="' . $row["imageUrl"] . '" alt="' . $row["productName"] . '">';
-                            echo '<h4>' . $row["productName"] . '</h4>';
-                            echo '<p class="description" >' . $row["description"] . '</p>';
-                            echo '<p class="price">Price: $' . $row["productPrice"] . '</p>';
-                            echo '<input type="hidden" name="productID" value="' . $row["productID"] . '">';
-                            echo '<button type="submit">Add to Cart</button>';
-                            echo '</div>';
-                            echo '</form>';
-                        }
-                    } else {
-                        echo "0 results";
-                    }
-
-                    // Close connection
-                    $conn->close();
+                displayProducts();
                 ?>
 
             </div>
