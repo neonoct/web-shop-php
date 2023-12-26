@@ -1,47 +1,43 @@
 <?php
-session_start(); // Start the session
-include 'db.php'; // Include database connection file
+session_start();
+include 'db.php';
 
 // Check if the user is logged in and has the role attribute in the session
 if (!isset($_SESSION['role'])) {
-    // same goes for here as in myaccount.php 
     echo "<script>alert('You are not authorized to see this page. Please login as a registered user.'); window.location.href='products.php';</script>";
     exit();
 }
 
 function displayCart() {
-    
     $conn = connectToDb();
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
 
     echo "<div class='flex-container'>";
     $totalItems = 0;
     $totalPrice = 0.0;
     if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
-        foreach ($_SESSION['cart'] as $productID => $quantity) {
-            // Retrieve product details
-            $sql = "SELECT productid, productName, productPrice, description, imageUrl FROM products WHERE productid = '" . $conn->real_escape_string($productID) . "'";
-            $result = $conn->query($sql);
+        foreach ($_SESSION['cart'] as $productId => $quantity) {
+            // Prepared statement for retrieving product details
+            $sql = "SELECT productId, productName, productPrice, description, imageUrl FROM products WHERE productId = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s", $productId);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
             if ($result->num_rows > 0) {
-                // Display product details
                 while($row = $result->fetch_assoc()) {
                     echo "<div>";
-                    echo "<img src='" . $row['imageUrl'] . "' alt='" . $row['productName'] . "'>";
-                    echo "<h4>" . $row['productName'] . "</h4>";
-                    echo "<p>" . $row['description'] . "</p>";
-                    echo "<p>Price: " . $row['productPrice'] . "</p>";
-                    echo "<form method='post' action='process.php' id='updateForm" . $productID . "'>";
+                    echo "<img src='" . htmlspecialchars($row['imageUrl']) . "' alt='" . htmlspecialchars($row['productName']) . "'>";
+                    echo "<h4>" . htmlspecialchars($row['productName']) . "</h4>";
+                    echo "<p>" . htmlspecialchars($row['description']) . "</p>";
+                    echo "<p>Price: " . htmlspecialchars($row['productPrice']) . "</p>";
+                    // Continue with the rest of your form
+                    echo "<form method='post' action='process.php' id='updateForm" . $productId . "'>";
                     echo "<input type='hidden' name='form_type' value='form1'>";
-                    echo "<input type='number' name='quantity' value='" . $quantity . "' onchange='document.getElementById(\"updateForm" . $productID . "\").submit();'>";
-                    echo "<input type='hidden' name='productID' value='" . $productID . "'>";                           
+                    echo "<input type='number' name='quantity' value='" . htmlspecialchars($quantity) . "' onchange='document.getElementById(\"updateForm" . htmlspecialchars($productId) . "\").submit();'>";
+                    echo "<input type='hidden' name='productId' value='" . htmlspecialchars($productId) . "'>";
                     echo "</form>";
                     echo "<form method='post' action='process.php'>";
-                    echo "<input type='hidden' name='productID' value='" . $productID . "'>";
+                    echo "<input type='hidden' name='productId' value='" . htmlspecialchars($productId) . "'>";
                     echo "<input type='hidden' name='form_type' value='form2'>";
                     echo "<input type='hidden' name='remove' value='1'>";
                     echo "<input type='submit' value='Remove'>";
@@ -59,13 +55,15 @@ function displayCart() {
     }
     echo "</div>";
 
-    echo "<p>Total items in basket: " . $totalItems . "</p>";
+    // Rest of your code...
+    echo "<p>Total items: " . $totalItems . "</p>";
     echo "<p>Total: " . $totalPrice . "</p>";
     $_SESSION['totalPrice'] = $totalPrice;
+    $_SESSION['totalItems'] = $totalItems;
 
-    echo "<form method='post' action='process.php'>";
-    echo"<input type='hidden' name='form_type' value='form11'>";
-    echo "<input type='submit' value='Proceed to Payment'>";
+    echo "<form  method='POST' action='process.php'>";
+    echo "<input type='hidden' name='form_type' value='form11'>";
+    echo "<input type='submit' value='Checkout'>";
     echo "</form>";
 
     $conn->close();
@@ -77,8 +75,7 @@ function displayCart() {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webshop Home</title>
+    <title>Cart</title>
     <link rel="stylesheet" href="cart.css">
 </head>
 <body>
@@ -95,7 +92,6 @@ function displayCart() {
             </ul>
         </nav>
     </header>
-
     <main>
         <h2>Welcome to Our Webshop!</h2>
         <h3>Cart</h3>

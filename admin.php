@@ -56,8 +56,8 @@ function manipulateUser() {
     echo "<input type='password' id='confirmPassword' name='confirmpassword' placeholder='Password'>";
     echo "<input type='text' name='address' placeholder='Address'>";
     echo "<select name='role' id='role'>";
-    echo "<option value='user'>User</option>";
-    echo "<option value='admin'>Admin</option>";
+    echo "<option value='2'>User</option>";
+    echo "<option value='1'>Admin</option>";
     echo "</select>";
     echo "<button type='submit' name='add' value='add'>Add User</button>";
     echo "</form>";
@@ -125,10 +125,13 @@ function manipulateProduct() {
     echo "<input type='hidden' name='form_type' value='form9'>";
     echo "<input type='text' name='productname' placeholder='Product Name'>";
     echo "<input type='text' name='productprice' placeholder='Product Price'>";
-    echo "<input type='text' name='categoryid' placeholder='Category ID'>";
-    //add description,imageurl
     echo "<input type='text' name='description' placeholder='Description'>";
     echo "<input type='text' name='imageurl' placeholder='Image URL'>";
+    echo "<select name='categoryId'>";
+    echo "<option value='1'>Laptop</option>";
+    echo "<option value='2'>Desktop</option>";
+    echo "<option value='3'>Accessory</option>";
+    echo "</select>";
     echo "<button type='submit' name='add' value='add'>Add Product</button>";
     echo "</form>";
     $conn->close();

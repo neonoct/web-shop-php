@@ -40,26 +40,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             addToCart();
             break;
 
-        
-        // Add cases for other forms
     }
 }
 
-
 function updateCart() {
     session_start();
-    if (isset($_POST['productID'])) {
-        $productID = $_POST['productID'];
+    if (isset($_POST['productId'])) {
+        $productId = filter_input(INPUT_POST, 'productId', FILTER_SANITIZE_NUMBER_INT);
 
         if (isset($_POST['remove'])) {
-            unset($_SESSION['cart'][$productID]);
+            unset($_SESSION['cart'][$productId]);
         } elseif (isset($_POST['quantity'])) {
-            $quantity = intval($_POST['quantity']);
+            $quantity = filter_input(INPUT_POST, 'quantity', FILTER_SANITIZE_NUMBER_INT);
 
-            if (isset($_SESSION['cart'][$productID])) {
-                if ($quantity > 0) {
-                    $_SESSION['cart'][$productID] = $quantity;
-                }
+            if (isset($_SESSION['cart'][$productId]) && $quantity > 0) {
+                $_SESSION['cart'][$productId] = $quantity;
             }
         }
     }
@@ -69,43 +64,27 @@ function updateCart() {
 function changeUserRole() {
     $conn = connectToDb();
     if (isset($_POST['userID']) && isset($_POST['role'])) {
-        $userID = $_POST['userID'];
-        $role = $_POST['role'];
-        if($role == 'admin'){
-            $role = 1;
-        }
-        else{
-            $role = 2;
-        }
+        $userID = intval($_POST['userID']);
+        $role = ($_POST['role'] == 'admin') ? 1 : 2;
 
-        $sql = "UPDATE users SET role = $role WHERE user_id = $userID";
-        $result = $conn->query($sql);
-        if ($result === TRUE) {
-            echo "Record updated successfully";
-        } else {
-            echo "Error updating record: " . $conn->error;
-        }
-
+        $stmt = $conn->prepare("UPDATE users SET role = ? WHERE user_id = ?");
+        $stmt->bind_param("ii", $role, $userID);
+        $stmt->execute();
+        $stmt->close();
     }
     $conn->close();
     header("Location: admin.php");
 }
 
 function removeUser() {
-    $conn = connectToDb(); //connect to the database
-
-    //take the info from the post and make the active 0
+    $conn = connectToDb();
     if (isset($_POST['remove'])) {
-        $userID = $_POST['remove'];
-        //set active to 0
-        $sql = "UPDATE users SET active = 0 WHERE user_id = $userID";
-        $result = $conn->query($sql);
-        if ($result === TRUE) {
-            echo "Record updated successfully";
-        } else {
-            echo "Error updating record: " . $conn->error;
-        }
-       
+        $userID = intval($_POST['remove']);
+
+        $stmt = $conn->prepare("UPDATE users SET active = 0 WHERE user_id = ?");
+        $stmt->bind_param("i", $userID);
+        $stmt->execute();
+        $stmt->close();
     }
     $conn->close();
     header("Location: admin.php");
@@ -113,31 +92,41 @@ function removeUser() {
 
 function addUser() {
     $conn = connectToDb();
+    if (isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['email'])  && isset($_POST['password'])  && isset($_POST['confirmpassword']) && ($_POST['password'] == $_POST['confirmpassword'])) {
+        $firstname = filter_input(INPUT_POST, 'firstname', FILTER_SANITIZE_STRING);
+        $lastname = filter_input(INPUT_POST, 'lastname', FILTER_SANITIZE_STRING);
+        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_STRING);
+        $password = $_POST['password'];
+        $role = $_POST['role'];
 
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $address = $_POST['address'];
-    $role = $_POST['role'];
+        $stmt = $conn->prepare("SELECT email FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    //hash the password
-    $password = password_hash($password, PASSWORD_DEFAULT);
-    
-    //if role is admin then 1 if user then 2
-    if($role == 'admin'){
-        $role = 1;
-    }
-    else{
-        $role = 2;
-    }
+        if ($result->num_rows > 0) {
+            echo "<script>alert('Email already in use.');</script>";
+            exit();
+        }
 
-    $sql = "INSERT INTO users (first_name, last_name, email, password, address, role, active) VALUES ('$firstname', '$lastname', '$email', '$password', '$address', '$role', 1)";
-    $result = $conn->query($sql);
-    if ($result === TRUE) {
-        echo "Record updated successfully";
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+        #$sql = "INSERT INTO users (first_name, last_name, email, password, address, active, role) VALUES (?, ?, ?, ?, ?, 1, 2)";
+        $sql = "INSERT INTO users (first_name, last_name, email, password, address, active, role) VALUES (?, ?, ?, ?, ?, 1, ?)";
+        $stmt = $conn->prepare($sql);
+        #$stmt->bind_param("sssss", $firstname, $lastname, $email, $passwordHash, $address);
+        $stmt->bind_param("sssssi", $firstname, $lastname, $email, $passwordHash, $address, $role);
+
+        if ($stmt->execute()) {
+            echo "<p>Registration successful.</p>";
+        } else {
+            echo "<p>Error: " . htmlspecialchars($conn->error) . "</p>";
+        }
+
+        $stmt->close();
     } else {
-        echo "Error updating record: " . $conn->error;
+        exit();
     }
 
     $conn->close();
@@ -145,69 +134,58 @@ function addUser() {
 }
 
 function removeProduct() {
-    $conn = connectToDb(); //connect to the database
-
-    //take the info from the post and make the active 0
+    $conn = connectToDb();
     if (isset($_POST['remove'])) {
-        $productID = $_POST['remove'];
-        //set active to 0
-        $sql = "UPDATE products SET active = 0 WHERE productId = $productID";
-        $result = $conn->query($sql);
-        if ($result === TRUE) {
-            echo "Record updated successfully";
-        } else {
-            echo "Error updating record: " . $conn->error;
-        }
-       
+        $productID = intval($_POST['remove']);
+
+        $stmt = $conn->prepare("UPDATE products SET active = 0 WHERE productId = ?");
+        $stmt->bind_param("i", $productID);
+        $stmt->execute();
+        $stmt->close();
     }
     $conn->close();
     header("Location: admin.php");
 }
 
-//maybe another function will be here
-
 function updateProduct() {
-    $conn = connectToDb(); //connect to the database
-    //take the info from the post and then update the product
-    if (isset($_POST['save'])) {
-        $productID = $_POST['productId'];
-        $productName = $_POST['productName'];
-        $productPrice = $_POST['productPrice'];
-        $categoryID = $_POST['categoryId'];
-        $description = $_POST['description'];
-        $imageURL = $_POST['imageUrl'];
-        //set active to 0
-        $sql = "UPDATE products SET productName = '$productName', productPrice = '$productPrice', categoryId = '$categoryID', description = '$description', imageURL = '$imageURL' WHERE productId = $productID";
-        $result = $conn->query($sql);
-        if ($result === TRUE) {
-            echo "Record updated successfully";
-        } else {
-            echo "Error updating record: " . $conn->error;
-        }
+    $conn = connectToDb();
+    if (isset($_POST['productId']) && isset($_POST['productName']) && isset($_POST['description']) && isset($_POST['productPrice']) && isset($_POST['imageUrl'])) {
+        $productId = intval($_POST['productId']);
+        $productName = filter_input(INPUT_POST, 'productName', FILTER_SANITIZE_STRING);
+        $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
+        $productPrice = filter_input(INPUT_POST, 'productPrice', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $imageUrl = filter_input(INPUT_POST, 'imageUrl', FILTER_SANITIZE_URL);
+        $categoryId = filter_input(INPUT_POST, 'categoryId', FILTER_SANITIZE_NUMBER_INT);
+
+        $stmt = $conn->prepare("UPDATE products SET productName = ?, description = ?, productPrice = ?, imageUrl = ?, categoryId = ? WHERE productId = ?");
+        $stmt->bind_param("ssdsii", $productName, $description, $productPrice, $imageUrl, $categoryId, $productId);
+        $stmt->execute();
+        $stmt->close();
     }
     $conn->close();
     header("Location: admin.php");
 }
 
 function addProduct() {
-    $conn = connectToDb(); //connect to the database
+    $conn = connectToDb();
+    if (isset($_POST['productname']) && isset($_POST['description']) && isset($_POST['productprice']) && isset($_POST['imageurl'])&& isset($_POST['categoryId'])) {
+        $productName = filter_input(INPUT_POST, 'productname', FILTER_SANITIZE_STRING);
+        $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
+        $productPrice = filter_input(INPUT_POST, 'productprice', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $imageUrl = filter_input(INPUT_POST, 'imageurl', FILTER_SANITIZE_URL);
+        $categoryId = filter_input(INPUT_POST, 'categoryId', FILTER_SANITIZE_NUMBER_INT);
 
-    //take the info from the post and make a new product
-    if (isset($_POST['add'])) {
-        $productName = $_POST['productname'];
-        $productPrice = $_POST['productprice'];
-        $categoryID = $_POST['categoryid'];
-        $description = $_POST['description'];
-        $imageURL = $_POST['imageurl'];
-        //set active to 0
-        $sql = "INSERT INTO products (productName, productPrice, categoryId, description, imageURL,active) VALUES ('$productName', '$productPrice', '$categoryID', '$description', '$imageURL',1)";
-        $result = $conn->query($sql);
-        if ($result === TRUE) {
-            echo "Record updated successfully";
-        } else {
-            echo "Error updating record: " . $conn->error;
-        }
+       # $stmt = $conn->prepare("INSERT INTO products (productName, description, productPrice, imageUrl, active) VALUES (?, ?, ?, ?, 1)");
+        #$stmt->bind_param("ssds", $productName, $description, $productPrice, $imageUrl);
+        $stmt = $conn->prepare("INSERT INTO products (productName, description, productPrice, imageUrl, categoryId, active) VALUES (?, ?, ?, ?, ?, 1)");
+        $stmt->bind_param("ssdsi", $productName, $description, $productPrice, $imageUrl, $categoryId);
+        $stmt->execute();
+        $stmt->close();
+
+    }else{
+        log("New product not added");
     }
+
     $conn->close();
     header("Location: admin.php");
 }
@@ -216,64 +194,79 @@ function logout() {
     session_start();
     session_destroy();
     header("Location: index.php");
-    exit();
 }
 
 function processPayment() {
-    $conn = connectToDb(); //connect to the database
-
     session_start();
-    if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0) {
-        // Process payment
-        //save to database instead of payment
+    if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+        $conn = connectToDb();
 
-        $customerID = $_SESSION['user_id'];
-        $sql = "INSERT INTO orders (customerId, date) VALUES ($customerID, NOW())";
-        //if successful add to ordersproducts table(orderId,productId,quantity) and add to payments table(paymentId,orderId,amount)
-        if ($conn->query($sql) === TRUE) {
-            $last_id = $conn->insert_id;
-            $totalPrice = $_SESSION['totalPrice'];
-            foreach ($_SESSION['cart'] as $productID => $quantity) {
-                $sql = "INSERT INTO ordersproducts (orderId, productId, quantity) VALUES ($last_id, $productID, $quantity)";
-                $conn->query($sql);
+        $totalItems = 0;
+        $totalPrice = 0.0;
+        foreach ($_SESSION['cart'] as $productId => $quantity) {
+            $sql = "SELECT productPrice FROM products WHERE productId = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $productId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $totalItems += $quantity;
+                    $totalPrice += $row['productPrice'] * $quantity;
+                }
             }
-            $sql = "INSERT INTO payments (orderId, amount) VALUES ($last_id, $totalPrice)";
-            $conn->query($sql);
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-            exit();
         }
 
-        // Clear cart
+        $stmt = $conn->prepare("INSERT INTO orders (user_id, totalItems, totalPrice) VALUES (?, ?, ?)");
+        $stmt->bind_param("iid", $_SESSION['user_id'], $totalItems, $totalPrice);
+        $stmt->execute();
+        $stmt->close();
+
+        $orderID = $conn->insert_id;
+
+        foreach ($_SESSION['cart'] as $productId => $quantity) {
+            $sql = "INSERT INTO order_items (order_id, product_id, quantity) VALUES (?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("iii", $orderID, $productId, $quantity);
+            $stmt->execute();
+            $stmt->close();
+        }
+
+        $conn->close();
         unset($_SESSION['cart']);
         echo "Your order has been placed.";
-        // Redirect user to myaccount page with a link
         echo "You can view your order history here:";
         echo "<a href='myaccount.php'>My Account</a>";
+        
 
-    } else {
+    }else {
         echo "Your cart is empty.";
     }
-    $conn->close();
 }
 
-function addToCart() {  
+function addToCart() {
+    //if user is not logged in, redirect to login page
     session_start();
+    if (!isset($_SESSION['user_id'])) {
+        #echo "<script>alert('You are already registered and logged. If you want to register another account logout first.'); window.location.href='login.php';</script>";
+        echo "<script>alert('You must be logged in to add products to the cart.'); window.location.href = 'login.php';</script>";
+        exit();
+    }
+
+    
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = array();
     }
-    if (isset($_POST['productID'])) {
-        if (!isset($_SESSION['role'])) {
-            echo "<script type='text/javascript'>alert('You must be logged in to add products to the cart.'); window.location.href = 'login.php';</script>";
+
+    if (isset($_POST['productId'])) {
+        $productId = filter_input(INPUT_POST, 'productId', FILTER_SANITIZE_NUMBER_INT);
+
+        if (isset($_SESSION['cart'][$productId])) {
+            $_SESSION['cart'][$productId]++;
         } else {
-            if (isset($_SESSION['cart'][$_POST['productID']])) {
-                $_SESSION['cart'][$_POST['productID']]++;
-            } else {
-                $_SESSION['cart'][$_POST['productID']] = 1;
-            }
+            $_SESSION['cart'][$productId] = 1;
         }
     }
     header("Location: products.php");
 }
-
-?>

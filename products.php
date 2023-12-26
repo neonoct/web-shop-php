@@ -1,24 +1,26 @@
 <?php
 include 'db.php';
 
-function displayProducts(){
-    $conn = connectToDb(); //connect to the database
-    // SQL query to select all active products
-    $sql = "SELECT productID, productName, description, productPrice, imageUrl FROM products WHERE active = 1";
-    $result = $conn->query($sql);
+function displayProducts() {
+    $conn = connectToDb(); // Connect to the database
+
+    // Prepared statement for selecting products
+    $sql = "SELECT productId, productName, description, productPrice, imageUrl FROM products WHERE active = 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     // Check if there are results
     if ($result->num_rows > 0) {
-        // Output data of each row
-        while($row = $result->fetch_assoc()) {
+        while ($row = $result->fetch_assoc()) {
             echo '<form method="post" action="process.php">';
             echo '<input type="hidden" name="form_type" value="form12">';
             echo '<div class="product-item">';
-            echo '<img src="' . $row["imageUrl"] . '" alt="' . $row["productName"] . '">';
-            echo '<h4>' . $row["productName"] . '</h4>';
-            echo '<p class="description" >' . $row["description"] . '</p>';
-            echo '<p class="price">Price: $' . $row["productPrice"] . '</p>';
-            echo '<input type="hidden" name="productID" value="' . $row["productID"] . '">';
+            echo '<img src="' . htmlspecialchars($row["imageUrl"]) . '" alt="' . htmlspecialchars($row["productName"]) . '">';
+            echo '<h4>' . htmlspecialchars($row["productName"]) . '</h4>';
+            echo '<p class="description">' . htmlspecialchars($row["description"]) . '</p>';
+            echo '<p class="price">Price: $' . htmlspecialchars($row["productPrice"]) . '</p>';
+            echo '<input type="hidden" name="productId" value="' . htmlspecialchars($row["productId"]) . '">';
             echo '<button type="submit">Add to Cart</button>';
             echo '</div>';
             echo '</form>';
@@ -28,11 +30,10 @@ function displayProducts(){
     }
 
     // Close connection
+    $stmt->close();
     $conn->close();
-
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,11 +61,10 @@ function displayProducts(){
         <!-- Featured Products Section -->
         <section class="featured-products">
             <h3>Featured Products</h3>
-            <!-- Product items will be added here -->
                     <!-- Search Bar -->
             <div class="search-container">
                 <input type="text" placeholder="Search products..." name="search">
-                <button type="submit">Search</button>
+                <button type="submit">Search</button> <!--this  button is not necessary but it better indicates that the search bar is a search bar-->
             </div>
                 <!-- Category Selector -->
             <div class="category-container">
@@ -74,7 +74,6 @@ function displayProducts(){
                     <option value="1">Laptop</option>
                     <option value="2">Desktop</option>
                     <option value="3">Accessories</option>
-                    <!-- Add more categories as needed -->
                 </select>
             </div>
             
@@ -91,9 +90,9 @@ function displayProducts(){
     <footer>
         <p>Contact Us: contact@frk-tech.com</p>
     </footer>
-        <!-- Place jQuery script before your custom script -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <!-- Include your custom script -->
-        <script src="fetchproducts.js"></script>
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include  custom script -->
+    <script src="fetchproducts.js"></script>
 </body>
 </html>
