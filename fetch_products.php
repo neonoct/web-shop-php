@@ -41,6 +41,7 @@ function fetchProducts() {
             //needs correction to be able to add to cart
             echo '<form method="post" action="process.php">';
             echo '<input type="hidden" name="form_type" value="form12">';
+            echo '<input type="hidden" name="productId" value="' . htmlspecialchars($row["productId"]) . '">'; //added
             echo '<div class="product-item">';
             echo '<img src="' . htmlspecialchars($row["imageUrl"]) . '" alt="' . htmlspecialchars($row["productName"]) . '">';
             echo '<h4>' . htmlspecialchars($row["productName"]) . '</h4>';
