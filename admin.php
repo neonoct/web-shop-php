@@ -25,7 +25,8 @@
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
                     echo "<tr><td>".$row["user_id"]."</td><td>".$row["first_name"]."</td><td>".$row["last_name"]."</td><td>".$row["email"]."</td><td>".$row["address"]."</td><td>";
-                    echo "<form action='changerole.php' method='POST'>";
+                    echo "<form action='process.php' method='POST'>";
+                    echo "<input type='hidden' name='form_type' value='form3'>";
                     echo "<select name='role'>";
                     echo "<option value='user'".($row["role"] == 2 ? ' selected' : '').">User</option>";
                     echo "<option value='admin'".($row["role"] == 1 ? ' selected' : '').">Admin</option>";
@@ -33,18 +34,18 @@
                     echo "<input type='hidden' name='userID' value='".$row["user_id"]."'>";
                     echo "<input type='submit' value='Change Role'>";
                     echo "</form>";
-                    echo "</td><td><form action='removeuser.php' method='POST'><button type='submit' name='remove' value='".$row["user_id"]."'>Remove</button></form></td></tr>";
+                    echo "</td><td><form action='process.php' method='POST'><input type='hidden' name='form_type' value='form4'><button type='submit' name='remove' value='".$row["user_id"]."'>Remove</button></form></td></tr>";
                 }
             }
             echo "</table>";
             //add a user
-            $adduserstring= "<form action='adduser.php' id='reg' method='POST'><input type='text' id='firstname' name='firstname' placeholder='Firstname'><input type='text' id='lastname' name='lastname' placeholder='Lastname'>";
+            $adduserstring= "<form action='process.php' id='reg' method='POST'><input type='hidden' name='form_type' value='form5'><input type='text' id='firstname' name='firstname' placeholder='Firstname'><input type='text' id='lastname' name='lastname' placeholder='Lastname'>";
             $adduserstring.="<input type='text' id='email' name='email' placeholder='Email'><input type='password' id='password' name='password' placeholder='Password'><input type='password' id='confirmPassword' name='confirmpassword' placeholder='Password'><input type='text' name='address' placeholder='Address'>";
             $adduserstring.="<select name='role' id='role'><option value='user'>User</option><option value='admin'>Admin</option></select>";
             $adduserstring.="<button type='submit' name='add' value='add'>Add User</button></form>";
         
             echo $adduserstring;
-            
+
             $conn->close();
 
 
@@ -75,14 +76,11 @@
                     }
                     
                     $productstring ="<tr><td>".$row["productId"]."</td><td>".$row["productName"]."</td><td>".$row["description"]."</td><td>".$row["productPrice"]."</td><td>".$row["categoryId"]."(".$cat.")"."</td>";
-                    $productstring .="<td>".$row["imageUrl"]."</td><td><form action='removeproduct.php' method='POST'><button type='submit' name='remove' value='".$row["productId"]."'>Remove</button>";
-                    $productstring .="</form></td><td><form id='edit' method='POST'><button type='submit' name='edit' value='".$row["productId"]."'>Edit</button></form></td></tr>";
+                    $productstring .="<td>".$row["imageUrl"]."</td><td><form action='process.php' method='POST'><input type='hidden' name='form_type' value='form6'><button type='submit' name='remove' value='".$row["productId"]."'>Remove</button>";
+                    $productstring .="</form></td><td><form id='edit' method='POST'><input type='hidden' name='form_type' value='form7'><button type='submit' name='edit' value='".$row["productId"]."'>Edit</button></form></td></tr>";
                     echo $productstring;
                     if(isset($_POST['edit']) && $_POST['edit'] == $row["productId"]){
-                        $editproductstring= "<form action='editproduct.php' method='POST'>";
-                        //alert imageurl
-                        #$x=$row["imageUrl"];
-                        #echo "<script>alert('Image URL is $x') </script>";
+                        $editproductstring= "<form action='process.php' method='POST'><input type='hidden' name='form_type' value='form8'>";
                         $editproductstring.=  "<tr><td><input type='hidden' name='productId' value='".$row["productId"]."'>".$row["productId"]."</td><td><input type='text' name='productName' value='".$row["productName"]."'></td>";
                         $editproductstring.= "<td><input type='text' id='description' name='description' value='".$row["description"]."'></td><td><input type='text' name='productPrice' value='".$row["productPrice"]."'></td>";
                         $editproductstring.="<td><input type='text' name='categoryId' value='".$row["categoryId"]."'></td><td><input type='text' name='imageUrl' value='".$row["imageUrl"]."'></td>";
@@ -94,7 +92,7 @@
             }
             echo "</table>";
             //add a product
-            $addproductstring= "<form action='addproduct.php' method='POST'><input type='text' name='productname' placeholder='Product Name'>";
+            $addproductstring= "<form action='process.php' method='POST'><input type='hidden' name='form_type' value='form9'><input type='text' name='productname' placeholder='Product Name'>";
             $addproductstring.="<input type='text' name='productprice' placeholder='Product Price'><input type='text' name='categoryid' placeholder='Category ID'>";
             //add description,imageurl
             $addproductstring.="<input type='text' name='description' placeholder='Description'><input type='text' name='imageurl' placeholder='Image URL'>";
@@ -109,13 +107,6 @@
             manipulateProduct();
         }
 
-        
-        
-        
-
-
-   
-        
 ?>
         
 <!DOCTYPE html>
@@ -148,7 +139,7 @@
         // display welcome admin
         echo "<p>Welcome Admin ",$_SESSION['firstname'],' ',$_SESSION['lastname'],"</p>";
         // logout button
-        echo "<form action='logout.php' method='POST'><button type='submit'>Logout</button></form>";
+        echo "<form action='process.php' method='POST'><input type='hidden' name='form_type' value='form10'><button type='submit'>Logout</button></form>";
         manipulateData();
         ?>
 

@@ -63,7 +63,8 @@ function displayCart() {
     echo "<p>Total: " . $totalPrice . "</p>";
     $_SESSION['totalPrice'] = $totalPrice;
 
-    echo "<form method='post' action='payment.php'>";
+    echo "<form method='post' action='process.php'>";
+    echo"<input type='hidden' name='form_type' value='form11'>";
     echo "<input type='submit' value='Proceed to Payment'>";
     echo "</form>";
 
