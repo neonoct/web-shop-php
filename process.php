@@ -117,6 +117,9 @@ function addUser() {
     $password = $_POST['password'];
     $address = $_POST['address'];
     $role = $_POST['role'];
+
+    //hash the password
+    $password = password_hash($password, PASSWORD_DEFAULT);
     
     //if role is admin then 1 if user then 2
     if($role == 'admin'){

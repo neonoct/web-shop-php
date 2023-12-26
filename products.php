@@ -1,4 +1,5 @@
 <?php
+include 'db.php';
 session_start();
 
 if (!isset($_SESSION['cart'])) {
@@ -65,8 +66,6 @@ if (isset($_POST['productID'])) {
             
             <div class="product-container" >
                 <?php
-                    // Database configuration
-                    include 'db.php';
                     $conn = connectToDb(); //connect to the database
 
                     // SQL query to select all active products
