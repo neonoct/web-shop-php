@@ -38,15 +38,8 @@ if (!isset($_SESSION['role'])) {
         <h2>Welcome to Our Webshop!</h2>
         <h3>Cart</h3>
             <?php
-
-            // Database configuration
-            $host     = "localhost";
-            $dbName   = "shopDb";
-            $username = "Webuser";
-            $password = "Lab2021";
-
-            // Create connection
-            $conn = new mysqli($host, $username, $password, $dbName);
+            include 'db.php';
+            $conn = connectToDb();
 
             // Check connection
             if ($conn->connect_error) {

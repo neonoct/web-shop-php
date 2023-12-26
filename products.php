@@ -66,18 +66,10 @@ if (isset($_POST['productID'])) {
             <div class="product-container" >
                 <?php
                     // Database configuration
-                    $host     = "localhost";
-                    $dbName   = "shopDb";
-                    $username = "Webuser";
-                    $password = "Lab2021";
+                    include 'db.php';
+                    $conn = connectToDb(); //connect to the database
 
-                    // Create connection
-                    $conn = new mysqli($host, $username, $password, $dbName);
-
-                    // Check connection
-                    if ($conn->connect_error) {
-                        die("Connection failed: " . $conn->connect_error);
-                    }
+        
 
                     // SQL query to select all active products
                     $sql = "SELECT productID, productName, description, productPrice, imageUrl FROM products WHERE active = 1";

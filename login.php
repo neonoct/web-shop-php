@@ -37,17 +37,8 @@
             session_start();
             //if already specified in the session then no need to check again           
             // Database configuration
-            $host     = "localhost";
-            $dbName   = "shopDb";
-            $username = "Webuser";
-            $password = "Lab2021";
-
-            // Create connection
-            $conn = new mysqli($host, $username, $password, $dbName);
-            // Check connection
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
+            include 'db.php';
+            $conn = connectToDb(); //connect to the database
 
             //check first if it the post is submitted from js
             if (!empty($_POST)) {

@@ -5,13 +5,8 @@ if (isset($_SESSION['cart']) && count($_SESSION['cart']) > 0) {
     // Process payment
     //save to database instead of payment
     // Database configuration
-    $host     = "localhost";
-    $dbName   = "shopDb";
-    $username = "Webuser";
-    $password = "Lab2021";
-
-    // Create connection
-    $conn = new mysqli($host, $username, $password, $dbName);
+    include 'db.php';
+    $conn = connectToDb(); //connect to the database
 
     // Check connection
     // if ($conn->connect_error) {

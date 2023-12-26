@@ -42,19 +42,8 @@ if (!isset($_SESSION['role'])) {
         <h3>My account page</h3>
         <?php
 
-            // Database configuration
-            $host     = "localhost";
-            $dbName   = "shopDb";
-            $username = "Webuser";
-            $password = "Lab2021";
-
-            // Create connection
-            $conn = new mysqli($host, $username, $password, $dbName);
-
-            // Check connection
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
+            include 'db.php';
+            $conn = connectToDb(); //connect to the database
 
             //take the info from the session
             $role = $_SESSION['role'];

@@ -1,17 +1,7 @@
 <?php
 // Database configuration
-$host = 'localhost'; // or your database host
-$username = 'Webuser'; // or your database username
-$password = 'Lab2021'; // or your database password
-$dbName = 'shopDb'; // or your database name
-
-// Create a new database connection instance
-$conn = new mysqli($host, $username, $password, $dbName);
-
-// Check for connection errors
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include 'db.php';
+$conn = connectToDb(); //connect to the database
 
 $searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
 $categoryId = isset($_GET['category']) ? $_GET['category'] : '';

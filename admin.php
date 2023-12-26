@@ -102,12 +102,16 @@
                 $productstring .="</form></td><td><form id='edit' method='POST'><button type='submit' name='edit' value='".$row["productId"]."'>Edit</button></form></td></tr>";
                 echo $productstring;
                 if(isset($_POST['edit']) && $_POST['edit'] == $row["productId"]){
-                    echo "<form action='editproduct.php' method='POST'>";
+                    $editproductstring= "<form action='editproduct.php' method='POST'>";
                     //alert imageurl
                     #$x=$row["imageUrl"];
                     #echo "<script>alert('Image URL is $x') </script>";
-                    echo  "<tr><td><input type='hidden' name='productId' value='".$row["productId"]."'>".$row["productId"]."</td><td><input type='text' name='productName' value='".$row["productName"]."'></td><td><input type='text' id='description' name='description' value='".$row["description"]."'></td><td><input type='text' name='productPrice' value='".$row["productPrice"]."'></td><td><input type='text' name='categoryId' value='".$row["categoryId"]."'></td><td><input type='text' name='imageUrl' value='".$row["imageUrl"]."'></td><td><button type='submit' name='save' value='".$row["productId"]."'>Save</button></td></tr>";
-                    echo "</form>";
+                    $editproductstring.=  "<tr><td><input type='hidden' name='productId' value='".$row["productId"]."'>".$row["productId"]."</td><td><input type='text' name='productName' value='".$row["productName"]."'></td>";
+                    $editproductstring.= "<td><input type='text' id='description' name='description' value='".$row["description"]."'></td><td><input type='text' name='productPrice' value='".$row["productPrice"]."'></td>";
+                    $editproductstring.="<td><input type='text' name='categoryId' value='".$row["categoryId"]."'></td><td><input type='text' name='imageUrl' value='".$row["imageUrl"]."'></td>";
+                    $editproductstring.="<td><button type='submit' name='save' value='".$row["productId"]."'>Save</button></td></tr>";
+                    $editproductstring.= "</form>";
+                    echo $editproductstring;
                 }
             }
         }
