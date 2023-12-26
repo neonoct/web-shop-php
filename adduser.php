@@ -30,6 +30,7 @@ function addUser() {
     $conn->close();
 }
 
+addUser();
 header("Location: admin.php");
 exit();
 

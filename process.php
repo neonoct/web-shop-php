@@ -1,5 +1,17 @@
 <?php
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    switch ($_POST['form_type']) {
+        case 'form1':
+            updateCart();
+            break;
+        case 'form2':
+            updateCart();
+            break;
+        // Add cases for other forms
+    }
+}
+
 
 function updateCart() {
     session_start();
@@ -21,7 +33,6 @@ function updateCart() {
     header("Location: cart.php");
 }
 
-updateCart();
 
 
 ?>
