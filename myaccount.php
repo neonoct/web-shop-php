@@ -1,5 +1,6 @@
 <?php
 include 'db.php';
+include "error.php";
 session_start(); 
 
 if (!isset($_SESSION['role'])) {

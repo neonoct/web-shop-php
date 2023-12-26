@@ -1,0 +1,15 @@
+2023-12-26 23:11:23 - Exception: Call to undefined function fog()
+2023-12-26 23:12:02 - Exception: Call to undefined function fog()
+2023-12-26 23:12:02 - Exception: Call to undefined function fog()
+2023-12-26 23:12:03 - Exception: Call to undefined function fog()
+2023-12-26 23:12:03 - Exception: Call to undefined function fog()
+2023-12-26 23:12:04 - Exception: Call to undefined function fog()
+2023-12-26 23:12:04 - Exception: Call to undefined function fog()
+2023-12-26 23:12:04 - Exception: Call to undefined function fog()
+2023-12-26 23:34:07 - Error [8192]: Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\LAB\project\pwithgpt\process.php on line 97
+2023-12-26 23:34:07 - Error [8192]: Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\LAB\project\pwithgpt\process.php on line 98
+2023-12-26 23:34:07 - Error [8192]: Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\LAB\project\pwithgpt\process.php on line 100
+2023-12-26 23:38:42 - Error [8192]: Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\LAB\project\pwithgpt\process.php on line 98
+2023-12-26 23:38:42 - Error [8192]: Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\LAB\project\pwithgpt\process.php on line 100
+2023-12-26 23:40:00 - Error [8192]: Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\LAB\project\pwithgpt\process.php on line 98
+2023-12-26 23:40:00 - Error [8192]: Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\LAB\project\pwithgpt\process.php on line 100

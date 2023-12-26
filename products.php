@@ -1,5 +1,6 @@
 <?php
 include 'db.php';
+include "error.php";
 
 function displayProducts() {
     $conn = connectToDb(); // Connect to the database

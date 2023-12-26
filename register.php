@@ -1,5 +1,6 @@
 <?php
 include 'db.php';
+include "error.php";
 session_start();
      
 // If the user is not logged in or their role is not 1, redirect them.
@@ -16,10 +17,10 @@ function register() {
 
     if (!empty($_POST)) {
         // Retrieve and sanitize form data
-        $firstname = filter_input(INPUT_POST, 'firstname', FILTER_SANITIZE_STRING);
-        $lastname = filter_input(INPUT_POST, 'lastname', FILTER_SANITIZE_STRING);
+        $firstname = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
+        $lastname = filter_input(INPUT_POST, 'lastname', FILTER_UNSAFE_RAW);
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-        $address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_STRING);
+        $address = filter_input(INPUT_POST, 'address', FILTER_UNSAFE_RAW);
         $password = $_POST['password']; // Password will be hashed
 
         // Prepared statement for checking if the email already exists

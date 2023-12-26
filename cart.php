@@ -1,7 +1,7 @@
 <?php
 session_start();
 include 'db.php';
-
+include "error.php";
 // Check if the user is logged in and has the role attribute in the session
 if (!isset($_SESSION['role'])) {
     echo "<script>alert('You are not authorized to see this page. Please login as a registered user.'); window.location.href='products.php';</script>";

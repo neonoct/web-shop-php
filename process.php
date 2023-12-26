@@ -1,5 +1,6 @@
 <?php
 include 'db.php';
+include "error.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     switch ($_POST['form_type']) {
@@ -93,10 +94,10 @@ function removeUser() {
 function addUser() {
     $conn = connectToDb();
     if (isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['email'])  && isset($_POST['password'])  && isset($_POST['confirmpassword']) && ($_POST['password'] == $_POST['confirmpassword'])) {
-        $firstname = filter_input(INPUT_POST, 'firstname', FILTER_SANITIZE_STRING);
-        $lastname = filter_input(INPUT_POST, 'lastname', FILTER_SANITIZE_STRING);
+        $firstname = filter_input(INPUT_POST, 'firstname', FILTER_UNSAFE_RAW);
+        $lastname = filter_input(INPUT_POST, 'lastname', FILTER_UNSAFE_RAW);
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-        $address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_STRING);
+        $address = filter_input(INPUT_POST, 'address', FILTER_UNSAFE_RAW);
         $password = $_POST['password'];
         $role = $_POST['role'];
 
@@ -151,8 +152,8 @@ function updateProduct() {
     $conn = connectToDb();
     if (isset($_POST['productId']) && isset($_POST['productName']) && isset($_POST['description']) && isset($_POST['productPrice']) && isset($_POST['imageUrl'])) {
         $productId = intval($_POST['productId']);
-        $productName = filter_input(INPUT_POST, 'productName', FILTER_SANITIZE_STRING);
-        $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
+        $productName = filter_input(INPUT_POST, 'productName', FILTER_UNSAFE_RAW);
+        $description = filter_input(INPUT_POST, 'description', FILTER_UNSAFE_RAW);
         $productPrice = filter_input(INPUT_POST, 'productPrice', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
         $imageUrl = filter_input(INPUT_POST, 'imageUrl', FILTER_SANITIZE_URL);
         $categoryId = filter_input(INPUT_POST, 'categoryId', FILTER_SANITIZE_NUMBER_INT);
@@ -169,8 +170,8 @@ function updateProduct() {
 function addProduct() {
     $conn = connectToDb();
     if (isset($_POST['productname']) && isset($_POST['description']) && isset($_POST['productprice']) && isset($_POST['imageurl'])&& isset($_POST['categoryId'])) {
-        $productName = filter_input(INPUT_POST, 'productname', FILTER_SANITIZE_STRING);
-        $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
+        $productName = filter_input(INPUT_POST, 'productname', FILTER_UNSAFE_RAW);
+        $description = filter_input(INPUT_POST, 'description', FILTER_UNSAFE_RAW);
         $productPrice = filter_input(INPUT_POST, 'productprice', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
         $imageUrl = filter_input(INPUT_POST, 'imageurl', FILTER_SANITIZE_URL);
         $categoryId = filter_input(INPUT_POST, 'categoryId', FILTER_SANITIZE_NUMBER_INT);

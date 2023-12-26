@@ -1,5 +1,9 @@
 <?php
+########
+#there arent any javascript checks for the admin page forms as i couldnt find enough time to do them
+#####
 include 'db.php';
+include "error.php";
 session_start();
 
 
@@ -10,6 +14,7 @@ if (empty($_SESSION['role']) || $_SESSION['role'] != 1) {
 
 function manipulateUser() {
     $conn = connectToDb();
+
 
     // Prepared statement for selecting users
     $sql = "SELECT * FROM users WHERE active = 1";
@@ -61,7 +66,7 @@ function manipulateUser() {
     echo "</select>";
     echo "<button type='submit' name='add' value='add'>Add User</button>";
     echo "</form>";
-
+    echo '<p>*to add a user you need to fill at least the firstname, lastname, email, password(and confirmpassword), and role fields</p>';
     // ...
 
     $conn->close();
@@ -116,10 +121,12 @@ function manipulateProduct() {
                 echo "<td><input type='text' name='imageUrl' value='".htmlspecialchars($row["imageUrl"])."'></td>";
                 echo "<td><button type='submit' name='save' value='".htmlspecialchars($row["productId"])."'>Save</button></td></tr>";
                 echo "</form>";
+                
             }
         }
     }
     echo "</table>";
+    
     //add a product
     echo "<form action='process.php' method='POST'>";
     echo "<input type='hidden' name='form_type' value='form9'>";
@@ -127,13 +134,14 @@ function manipulateProduct() {
     echo "<input type='text' name='productprice' placeholder='Product Price'>";
     echo "<input type='text' name='description' placeholder='Description'>";
     echo "<input type='text' name='imageurl' placeholder='Image URL'>";
-    echo "<select name='categoryId'>";
+    echo "<select name='categoryId' id='role'>";
     echo "<option value='1'>Laptop</option>";
     echo "<option value='2'>Desktop</option>";
     echo "<option value='3'>Accessory</option>";
     echo "</select>";
     echo "<button type='submit' name='add' value='add'>Add Product</button>";
     echo "</form>";
+    echo '<p>*to add a product you have to fill the productname, productprice, description, imageurl, and category fields</p>';
     $conn->close();
 }
 
@@ -141,6 +149,7 @@ function manipulateData() {
     manipulateUser();
     manipulateProduct();
 }
+
 
 ?>
 

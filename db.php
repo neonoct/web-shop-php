@@ -1,4 +1,5 @@
 <?php
+
 //make a function connectToDb that returns a connection to the database
 
 function connectToDb(){

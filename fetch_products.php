@@ -1,6 +1,7 @@
 <?php
 // Database configuration
 include 'db.php';
+include "error.php";
 
 function fetchProducts() {
     $conn = connectToDb(); // Connect to the database
