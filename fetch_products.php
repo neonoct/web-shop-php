@@ -38,7 +38,6 @@ function fetchProducts() {
     // Output the products
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
-            //needs correction to be able to add to cart
             echo '<form method="post" action="process.php">';
             echo '<input type="hidden" name="form_type" value="form12">';
             echo '<input type="hidden" name="productId" value="' . htmlspecialchars($row["productId"]) . '">'; //added

@@ -30,7 +30,6 @@ function displayCart() {
                     echo "<h4>" . htmlspecialchars($row['productName']) . "</h4>";
                     echo "<p>" . htmlspecialchars($row['description']) . "</p>";
                     echo "<p>Price: " . htmlspecialchars($row['productPrice']) . "</p>";
-                    // Continue with the rest of your form
                     echo "<form method='post' action='process.php' id='updateForm" . $productId . "'>";
                     echo "<input type='hidden' name='form_type' value='form1'>";
                     echo "<input type='number' name='quantity' value='" . htmlspecialchars($quantity) . "' onchange='document.getElementById(\"updateForm" . htmlspecialchars($productId) . "\").submit();'>";
@@ -55,7 +54,6 @@ function displayCart() {
     }
     echo "</div>";
 
-    // Rest of your code...
     echo "<p>Total items: " . $totalItems . "</p>";
     echo "<p>Total: " . $totalPrice . "</p>";
     $_SESSION['totalPrice'] = $totalPrice;

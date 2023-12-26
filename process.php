@@ -113,10 +113,8 @@ function addUser() {
 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-        #$sql = "INSERT INTO users (first_name, last_name, email, password, address, active, role) VALUES (?, ?, ?, ?, ?, 1, 2)";
         $sql = "INSERT INTO users (first_name, last_name, email, password, address, active, role) VALUES (?, ?, ?, ?, ?, 1, ?)";
         $stmt = $conn->prepare($sql);
-        #$stmt->bind_param("sssss", $firstname, $lastname, $email, $passwordHash, $address);
         $stmt->bind_param("sssssi", $firstname, $lastname, $email, $passwordHash, $address, $role);
 
         if ($stmt->execute()) {
@@ -176,8 +174,6 @@ function addProduct() {
         $imageUrl = filter_input(INPUT_POST, 'imageurl', FILTER_SANITIZE_URL);
         $categoryId = filter_input(INPUT_POST, 'categoryId', FILTER_SANITIZE_NUMBER_INT);
 
-       # $stmt = $conn->prepare("INSERT INTO products (productName, description, productPrice, imageUrl, active) VALUES (?, ?, ?, ?, 1)");
-        #$stmt->bind_param("ssds", $productName, $description, $productPrice, $imageUrl);
         $stmt = $conn->prepare("INSERT INTO products (productName, description, productPrice, imageUrl, categoryId, active) VALUES (?, ?, ?, ?, ?, 1)");
         $stmt->bind_param("ssdsi", $productName, $description, $productPrice, $imageUrl, $categoryId);
         $stmt->execute();
@@ -213,21 +209,8 @@ function processPayment() {
             $result = $stmt->get_result();
             $stmt->close();
 
-
-            /* 
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    #$totalItems += $quantity;
-                    $totalPrice += $row['productPrice'] * $quantity;
-                }
-            }
-            */
         }
 
-        #$stmt = $conn->prepare("INSERT INTO orders (customerId, totalItems, totalPrice) VALUES (?, ?, ?)");
-        #$stmt->bind_param("iid", $_SESSION['user_id'], $totalItems, $totalPrice);
-        #insert into orders table(customerId,date)
-        
         $stmt=$conn->prepare("INSERT INTO orders (customerId,date) VALUES (?,NOW())");
         $stmt->bind_param("i", $_SESSION['user_id']);
         $stmt->execute();
@@ -236,8 +219,7 @@ function processPayment() {
         $orderID = $conn->insert_id;
 
         foreach ($_SESSION['cart'] as $productId => $quantity) {
-            #$sql = "INSERT INTO order_items (order_id, product_id, quantity) VALUES (?, ?, ?)";
-            #INSERT INTO ordersproducts (orderId, productId, quantity
+
             $sql = "INSERT INTO ordersproducts (orderId, productId, quantity) VALUES (?, ?, ?)";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("iii", $orderID, $productId, $quantity);
@@ -268,7 +250,6 @@ function addToCart() {
     //if user is not logged in, redirect to login page
     session_start();
     if (!isset($_SESSION['user_id'])) {
-        #echo "<script>alert('You are already registered and logged. If you want to register another account logout first.'); window.location.href='login.php';</script>";
         echo "<script>alert('You must be logged in to add products to the cart.'); window.location.href = 'login.php';</script>";
         exit();
     }
