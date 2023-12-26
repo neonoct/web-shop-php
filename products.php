@@ -69,8 +69,6 @@ if (isset($_POST['productID'])) {
                     include 'db.php';
                     $conn = connectToDb(); //connect to the database
 
-        
-
                     // SQL query to select all active products
                     $sql = "SELECT productID, productName, description, productPrice, imageUrl FROM products WHERE active = 1";
                     $result = $conn->query($sql);

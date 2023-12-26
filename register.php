@@ -82,22 +82,19 @@
                 exit();
             }
 
-                //hash the password using salt
-                $password = password_hash($password, PASSWORD_DEFAULT);
-                
-                
-
-                // Insert data into database table users(user_id	first_name	last_name	email	password	address	active	role)
-                $sql = "INSERT INTO users (first_name, last_name, email, password, address, active, role) VALUES ('$firstname', '$lastname', '$email', '$password', '$address', 1, 2)";
-                //if the query is successful
-                if ($conn->query($sql) === TRUE) {
-                    echo "<p>Registration successful.</p>";
-                } else {
-                    echo "<p>Error: " . $sql . "<br>" . $conn->error . "</p>";
-                }
+            //hash the password using salt
+            $password = password_hash($password, PASSWORD_DEFAULT);
+            // Insert data into database table users(user_id	first_name	last_name	email	password	address	active	role)
+            $sql = "INSERT INTO users (first_name, last_name, email, password, address, active, role) VALUES ('$firstname', '$lastname', '$email', '$password', '$address', 1, 2)";
+            //if the query is successful
+            if ($conn->query($sql) === TRUE) {
+                echo "<p>Registration successful.</p>";
+            } else {
+                echo "<p>Error: " . $sql . "<br>" . $conn->error . "</p>";
+            }
 
             $conn->close();
-            ?>
+        ?>
         <!-- if not registered yet send to register.php -->
         <p>Already registered? <a href="login.php">Login here</a>.</p>
     </main>
