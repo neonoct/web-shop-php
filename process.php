@@ -202,37 +202,54 @@ function processPayment() {
     if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
         $conn = connectToDb();
 
-        $totalItems = 0;
-        $totalPrice = 0.0;
+        #$totalItems = 0;
+        #$totalPrice = 0.0;
+        $totalPrice = $_SESSION['totalPrice'];
         foreach ($_SESSION['cart'] as $productId => $quantity) {
             $sql = "SELECT productPrice FROM products WHERE productId = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $productId);
             $stmt->execute();
             $result = $stmt->get_result();
+            $stmt->close();
 
+
+            /* 
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
-                    $totalItems += $quantity;
+                    #$totalItems += $quantity;
                     $totalPrice += $row['productPrice'] * $quantity;
                 }
             }
+            */
         }
 
-        $stmt = $conn->prepare("INSERT INTO orders (user_id, totalItems, totalPrice) VALUES (?, ?, ?)");
-        $stmt->bind_param("iid", $_SESSION['user_id'], $totalItems, $totalPrice);
+        #$stmt = $conn->prepare("INSERT INTO orders (customerId, totalItems, totalPrice) VALUES (?, ?, ?)");
+        #$stmt->bind_param("iid", $_SESSION['user_id'], $totalItems, $totalPrice);
+        #insert into orders table(customerId,date)
+        
+        $stmt=$conn->prepare("INSERT INTO orders (customerId,date) VALUES (?,NOW())");
+        $stmt->bind_param("i", $_SESSION['user_id']);
         $stmt->execute();
         $stmt->close();
 
         $orderID = $conn->insert_id;
 
         foreach ($_SESSION['cart'] as $productId => $quantity) {
-            $sql = "INSERT INTO order_items (order_id, product_id, quantity) VALUES (?, ?, ?)";
+            #$sql = "INSERT INTO order_items (order_id, product_id, quantity) VALUES (?, ?, ?)";
+            #INSERT INTO ordersproducts (orderId, productId, quantity
+            $sql = "INSERT INTO ordersproducts (orderId, productId, quantity) VALUES (?, ?, ?)";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("iii", $orderID, $productId, $quantity);
             $stmt->execute();
             $stmt->close();
         }
+        #INSERT INTO payments (orderId, amount)
+        $sql = "INSERT INTO payments (orderId, amount) VALUES (?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("id", $orderID, $totalPrice);
+        $stmt->execute();
+        $stmt->close();
 
         $conn->close();
         unset($_SESSION['cart']);
@@ -243,6 +260,7 @@ function processPayment() {
 
     }else {
         echo "Your cart is empty.";
+        echo "<a href='products.php'>Products</a>";
     }
 }
 

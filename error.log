@@ -13,3 +13,8 @@
 2023-12-26 23:38:42 - Error [8192]: Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\LAB\project\pwithgpt\process.php on line 100
 2023-12-26 23:40:00 - Error [8192]: Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\LAB\project\pwithgpt\process.php on line 98
 2023-12-26 23:40:00 - Error [8192]: Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\LAB\project\pwithgpt\process.php on line 100
+2023-12-26 23:58:34 - Exception: Unknown column 'user_id' in 'field list'
+2023-12-27 00:03:42 - Exception: Unknown column 'totalItems' in 'field list'
+2023-12-27 00:03:50 - Exception: Unknown column 'totalItems' in 'field list'
+2023-12-27 00:21:03 - Exception: Commands out of sync; you can't run this command now
+2023-12-27 00:22:01 - Exception: Commands out of sync; you can't run this command now
