@@ -1,38 +1,47 @@
-<!-- add an admin to db -->
-<!-- role for admin = 1,for customer = 2 -->
-
-
 <?php
 include 'db.php';
+
 function addAdmin() {
     $conn = connectToDb();
 
     // Add an admin to the database
-    $firstname = "admin1";
+    $firstname = "admin3";
     $lastname = "admin";
-    $email = "admin1@email.com";
-    $password = "admin01.";
+    $email = "admin3@email.com";
+    $password = "admin03.";
     $address = "";
 
-    //if it is already on the database, it will not be added
-    $checkSql = "SELECT * FROM users WHERE email = '$email'";
-    $result = $conn->query($checkSql);
+    // Sanitize email before using in a query
+    $email = mysqli_real_escape_string($conn, $email);
+
+    // Prepared statement to check if the admin already exists
+    $checkSql = "SELECT * FROM users WHERE email = ?";
+    $stmt = $conn->prepare($checkSql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
     if ($result->num_rows > 0) {
-        echo "<p>Admin already exists.</p>";
+        echo "<p>" . htmlspecialchars("Admin already exists.") . "</p>";
         exit();
     }
 
     $password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Insert admin data into database table users(user_id	first_name	last_name	email	password	address	active	role) but just use the email and password active = 1, role = 1
-    $sql = "INSERT INTO users (first_name, last_name, email, password, address, active, role) VALUES ('$firstname', '$lastname', '$email', '$password', '$address', 1, 1)";
+    // Prepared statement to insert admin data
+    $sql = "INSERT INTO users (first_name, last_name, email, password, address, active, role) VALUES (?, ?, ?, ?, ?, 1, 1)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssss", $firstname, $lastname, $email, $password, $address);
 
-    //if the query is successful
-    if ($conn->query($sql) === TRUE) {
-        echo "<p>Admin added to database.</p>";
+    // Execute the query
+    if ($stmt->execute()) {
+        echo "<p>" . htmlspecialchars("Admin added to database.") . "</p>";
     } else {
-        echo "<p>Error: " . $sql . "<br>" . $conn->error . "</p>";
+        echo "<p>Error: " . htmlspecialchars($stmt->error) . "</p>";
     }
+
+    // Close the prepared statement
+    $stmt->close();
 }
 
 addAdmin();

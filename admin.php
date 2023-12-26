@@ -1,120 +1,151 @@
 <?php
-        include 'db.php';
-        session_start();
-        // display welcome admin if logged in        
-        // If the user is not logged in or their role is not 1, redirect them.
-        if (empty($_SESSION['role']) || $_SESSION['role'] != 1) {
-            echo "<script>alert('You are not authorized to see this page. Please login.'); window.location.href='login.php';</script>"; // i would use header("Location: login.php"); but in this case 
-            //before alerting the user it is redirecting to login.php and not showing the alert
-            //so i found this code with window.location.href='login.php' and it is working 
-            exit();
-        }
-        
-        
-        //make a table with all the users and their info so that the admin can remove or add that user
-        // Database configuration
+include 'db.php';
+session_start();
 
-        function manipulateUser(){
-            $conn = connectToDb(); //connect to the database
-            //take the info from the session
-            $sql = "SELECT * FROM users WHERE active = 1";
-            $result = $conn->query($sql);
-            echo "<h3>Users</h3>";
-            echo "<table>";
-            echo "<tr><th>UserID</th><th>Firstname</th><th>Lastname</th><th>Email</th><th>Address</th><th>Role</th><th>Remove</th></tr>";
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    echo "<tr><td>".$row["user_id"]."</td><td>".$row["first_name"]."</td><td>".$row["last_name"]."</td><td>".$row["email"]."</td><td>".$row["address"]."</td><td>";
-                    echo "<form action='process.php' method='POST'>";
-                    echo "<input type='hidden' name='form_type' value='form3'>";
-                    echo "<select name='role'>";
-                    echo "<option value='user'".($row["role"] == 2 ? ' selected' : '').">User</option>";
-                    echo "<option value='admin'".($row["role"] == 1 ? ' selected' : '').">Admin</option>";
-                    echo "</select>";
-                    echo "<input type='hidden' name='userID' value='".$row["user_id"]."'>";
-                    echo "<input type='submit' value='Change Role'>";
-                    echo "</form>";
-                    echo "</td><td><form action='process.php' method='POST'><input type='hidden' name='form_type' value='form4'><button type='submit' name='remove' value='".$row["user_id"]."'>Remove</button></form></td></tr>";
-                }
+
+if (empty($_SESSION['role']) || $_SESSION['role'] != 1) {
+    echo "<script>alert('You are not authorized to see this page. Please login.'); window.location.href='login.php';</script>";
+    exit();
+}
+
+function manipulateUser() {
+    $conn = connectToDb();
+
+    // Prepared statement for selecting users
+    $sql = "SELECT * FROM users WHERE active = 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    echo "<h3>Users</h3>";
+    echo "<table>";
+    echo "<tr><th>UserID</th><th>Firstname</th><th>Lastname</th><th>Email</th><th>Address</th><th>Role</th><th>Remove</th></tr>";
+
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            // Echo with htmlspecialchars
+            echo "<tr><td>".htmlspecialchars($row["user_id"])."</td>";
+            // Continue echoing other fields with htmlspecialchars...
+            echo "<td>".htmlspecialchars($row["first_name"])."</td>";
+            echo "<td>".htmlspecialchars($row["last_name"])."</td>";
+            echo "<td>".htmlspecialchars($row["email"])."</td>";
+            echo "<td>".htmlspecialchars($row["address"])."</td>";
+            echo "<td>";
+            echo "<form action='process.php' method='POST'>";
+            echo "<input type='hidden' name='form_type' value='form3'>";
+            echo "<select name='role'>";
+            echo "<option value='user'".($row["role"] == 2 ? ' selected' : '').">User</option>";
+            echo "<option value='admin'".($row["role"] == 1 ? ' selected' : '').">Admin</option>";
+            echo "</select>";
+            echo "<input type='hidden' name='userID' value='".htmlspecialchars($row["user_id"])."'>";
+            echo "<input type='submit' value='Change Role'>";
+            echo "</form>";
+            echo "</td><td><form action='process.php' method='POST'><input type='hidden' name='form_type' value='form4'><button type='submit' name='remove' value='".htmlspecialchars($row["user_id"])."'>Remove</button></form></td></tr>";
+            
+
+        }
+    }
+    echo "</table>";
+
+    echo "<form action='process.php' id='reg' method='POST'>"; 
+    echo "<input type='hidden' name='form_type' value='form5'>";
+    echo "<input type='text' id='firstname' name='firstname' placeholder='Firstname'>";
+    echo "<input type='text' id='lastname' name='lastname' placeholder='Lastname'>";
+    echo "<input type='text' id='email' name='email' placeholder='Email'>";
+    echo "<input type='password' id='password' name='password' placeholder='Password'>";
+    echo "<input type='password' id='confirmPassword' name='confirmpassword' placeholder='Password'>";
+    echo "<input type='text' name='address' placeholder='Address'>";
+    echo "<select name='role' id='role'>";
+    echo "<option value='user'>User</option>";
+    echo "<option value='admin'>Admin</option>";
+    echo "</select>";
+    echo "<button type='submit' name='add' value='add'>Add User</button>";
+    echo "</form>";
+
+    // ...
+
+    $conn->close();
+}
+
+function manipulateProduct() {
+    $conn = connectToDb();
+
+    // Prepared statement for selecting products
+    $sql = "SELECT * FROM products WHERE active = 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    echo "<h3>Products</h3>";
+    echo "<table>";
+    echo "<tr><th>productId</th><th>Product Name</th><th>Description</th><th>Price</th><th>Category</th><th>ImageURL</th><th>Remove</th><th>Edit</th></tr>";
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            //if category is 1 then it is a laptop if 2 then it is a desktop if 3 then it is a accessory
+            if($row["categoryId"]==1){
+                $cat="Laptop";
             }
-            echo "</table>";
-            //add a user
-            $adduserstring= "<form action='process.php' id='reg' method='POST'><input type='hidden' name='form_type' value='form5'><input type='text' id='firstname' name='firstname' placeholder='Firstname'><input type='text' id='lastname' name='lastname' placeholder='Lastname'>";
-            $adduserstring.="<input type='text' id='email' name='email' placeholder='Email'><input type='password' id='password' name='password' placeholder='Password'><input type='password' id='confirmPassword' name='confirmpassword' placeholder='Password'><input type='text' name='address' placeholder='Address'>";
-            $adduserstring.="<select name='role' id='role'><option value='user'>User</option><option value='admin'>Admin</option></select>";
-            $adduserstring.="<button type='submit' name='add' value='add'>Add User</button></form>";
-        
-            echo $adduserstring;
-
-            $conn->close();
-
-
-        }
-        
-        function manipulateProduct(){
-            $conn = connectToDb(); //connect to the database
-            //make a table with all the products and their info so that the admin can remove or add that product
-            $sql = "SELECT * FROM products WHERE active = 1";
-            $result = $conn->query($sql);
-            echo "<h3>Products</h3>";
-            echo "<table>";
-            echo "<tr><th>ProductID</th><th>Product Name</th><th>Description</th><th>Price</th><th>Category</th><th>ImageURL</th><th>Remove</th><th>Edit</th></tr>";
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    //if category is 1 then it is a laptop if 2 then it is a desktop if 3 then it is a accessory
-                    if($row["categoryId"]==1){
-                        $cat="Laptop";
-                    }
-                    else if($row["categoryId"]==2){
-                        $cat="Desktop";
-                    }
-                    else if($row["categoryId"]==3){
-                        $cat="Accessory";
-                    }
-                    else{
-                        $cat="Unknown";
-                    }
-                    
-                    $productstring ="<tr><td>".$row["productId"]."</td><td>".$row["productName"]."</td><td>".$row["description"]."</td><td>".$row["productPrice"]."</td><td>".$row["categoryId"]."(".$cat.")"."</td>";
-                    $productstring .="<td>".$row["imageUrl"]."</td><td><form action='process.php' method='POST'><input type='hidden' name='form_type' value='form6'><button type='submit' name='remove' value='".$row["productId"]."'>Remove</button>";
-                    $productstring .="</form></td><td><form id='edit' method='POST'><input type='hidden' name='form_type' value='form7'><button type='submit' name='edit' value='".$row["productId"]."'>Edit</button></form></td></tr>";
-                    echo $productstring;
-                    if(isset($_POST['edit']) && $_POST['edit'] == $row["productId"]){
-                        $editproductstring= "<form action='process.php' method='POST'><input type='hidden' name='form_type' value='form8'>";
-                        $editproductstring.=  "<tr><td><input type='hidden' name='productId' value='".$row["productId"]."'>".$row["productId"]."</td><td><input type='text' name='productName' value='".$row["productName"]."'></td>";
-                        $editproductstring.= "<td><input type='text' id='description' name='description' value='".$row["description"]."'></td><td><input type='text' name='productPrice' value='".$row["productPrice"]."'></td>";
-                        $editproductstring.="<td><input type='text' name='categoryId' value='".$row["categoryId"]."'></td><td><input type='text' name='imageUrl' value='".$row["imageUrl"]."'></td>";
-                        $editproductstring.="<td><button type='submit' name='save' value='".$row["productId"]."'>Save</button></td></tr>";
-                        $editproductstring.= "</form>";
-                        echo $editproductstring;
-                    }
-                }
+            else if($row["categoryId"]==2){
+                $cat="Desktop";
             }
-            echo "</table>";
-            //add a product
-            $addproductstring= "<form action='process.php' method='POST'><input type='hidden' name='form_type' value='form9'><input type='text' name='productname' placeholder='Product Name'>";
-            $addproductstring.="<input type='text' name='productprice' placeholder='Product Price'><input type='text' name='categoryid' placeholder='Category ID'>";
-            //add description,imageurl
-            $addproductstring.="<input type='text' name='description' placeholder='Description'><input type='text' name='imageurl' placeholder='Image URL'>";
-            $addproductstring.="<button type='submit' name='add' value='add'>Add Product</button></form>";
-            echo $addproductstring;
-            $conn->close();
-
+            else if($row["categoryId"]==3){
+                $cat="Accessory";
+            }
+            echo "<tr><td>".htmlspecialchars($row["productId"])."</td>";
+            echo "<td>".htmlspecialchars($row["productName"])."</td>";
+            echo "<td>".htmlspecialchars($row["description"])."</td>";
+            echo "<td>".htmlspecialchars($row["productPrice"])."</td>";
+            echo "<td>".htmlspecialchars($cat)."</td>";
+            echo "<td>".htmlspecialchars($row["imageUrl"])."</td>";
+            echo "<td><form action='process.php' method='POST'><input type='hidden' name='form_type' value='form6'><button type='submit' name='remove' value='".htmlspecialchars($row["productId"])."'>Remove</button></form></td>";
+            echo "<td><form id='edit' method='POST'><input type='hidden' name='form_type' value='form7'><button type='submit' name='edit' value='".htmlspecialchars($row["productId"])."'>Edit</button></form></td></tr>";
+            if(isset($_POST['edit']) && $_POST['edit'] == $row["productId"]){
+                echo "<form action='process.php' method='POST'>";
+                echo "<input type='hidden' name='form_type' value='form8'>";
+                echo "<tr><td><input type='hidden' name='productId' value='".htmlspecialchars($row["productId"])."'>".htmlspecialchars($row["productId"])."</td>";
+                echo "<td><input type='text' name='productName' value='".htmlspecialchars($row["productName"])."'></td>";
+                echo "<td><input type='text' id='description' name='description' value='".htmlspecialchars($row["description"])."'></td>";
+                echo "<td><input type='text' name='productPrice' value='".htmlspecialchars($row["productPrice"])."'></td>";
+                #echo "<td><input type='text' name='categoryId' value='".htmlspecialchars($row["categoryId"])."'></td>";
+                // Add a select box for category
+                echo "<td><select name='categoryId'>";
+                echo "<option value='1'".($row["categoryId"] == 1 ? ' selected' : '').">Laptop</option>";
+                echo "<option value='2'".($row["categoryId"] == 2 ? ' selected' : '').">Desktop</option>";
+                echo "<option value='3'".($row["categoryId"] == 3 ? ' selected' : '').">Accessory</option>";
+                echo "</select></td>";
+                echo "<td><input type='text' name='imageUrl' value='".htmlspecialchars($row["imageUrl"])."'></td>";
+                echo "<td><button type='submit' name='save' value='".htmlspecialchars($row["productId"])."'>Save</button></td></tr>";
+                echo "</form>";
+            }
         }
+    }
+    echo "</table>";
+    //add a product
+    echo "<form action='process.php' method='POST'>";
+    echo "<input type='hidden' name='form_type' value='form9'>";
+    echo "<input type='text' name='productname' placeholder='Product Name'>";
+    echo "<input type='text' name='productprice' placeholder='Product Price'>";
+    echo "<input type='text' name='categoryid' placeholder='Category ID'>";
+    //add description,imageurl
+    echo "<input type='text' name='description' placeholder='Description'>";
+    echo "<input type='text' name='imageurl' placeholder='Image URL'>";
+    echo "<button type='submit' name='add' value='add'>Add Product</button>";
+    echo "</form>";
+    $conn->close();
+}
 
-        function manipulateData(){
-            manipulateUser();
-            manipulateProduct();
-        }
+function manipulateData() {
+    manipulateUser();
+    manipulateProduct();
+}
 
 ?>
-        
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webshop Home</title>
+    <title>Admin Page</title>
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>
@@ -131,21 +162,16 @@
             </ul>
         </nav>
     </header>
-
     <main>
-        <h2>Welcome to Our Webshop!</h2>
-        <h3>Admin Page</h3>
+        <h2>Admin Page</h2>
         <?php
         // display welcome admin
-        echo "<p>Welcome Admin ",$_SESSION['firstname'],' ',$_SESSION['lastname'],"</p>";
+        echo "<p>Welcome Admin ".$_SESSION['firstname']." ".$_SESSION['lastname']."</p>";
         // logout button
         echo "<form action='process.php' method='POST'><input type='hidden' name='form_type' value='form10'><button type='submit'>Logout</button></form>";
-        manipulateData();
+        manipulateData(); 
         ?>
-
-
     </main>
-
     <footer>
         <p>Contact Us: contact@frk-tech.com</p>
     </footer>

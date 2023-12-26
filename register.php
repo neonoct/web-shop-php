@@ -1,17 +1,56 @@
 <?php
-        session_start();
-        // display welcome admin if logged in        
-        // If the user is not logged in or their role is not 1, redirect them.
-        if (!empty($_SESSION['role']) && ($_SESSION['role'] == 1 || $_SESSION['role'] == 2)) {
-            echo "<script>alert('You are already registered and logged. If you want to register another account logout first.'); window.location.href='myaccount.php';</script>";
-             // i would use header("Location: login.php"); but in this case 
-            //before alerting the user it is redirecting to login.php and not showing the alert
-            //so i found this code with window.location.href='login.php' and it is working 
-            exit();
-        }
+    include 'db.php';
+    session_start();
+    // display welcome admin if logged in        
+    // If the user is not logged in or their role is not 1, redirect them.
+    if (!empty($_SESSION['role']) && ($_SESSION['role'] == 1 || $_SESSION['role'] == 2)) {
+        echo "<script>alert('You are already registered and logged. If you want to register another account logout first.'); window.location.href='myaccount.php';</script>";
+        // i would use header("Location: login.php"); but in this case 
+        //before alerting the user it is redirecting to login.php and not showing the alert
+        //so i found this code with window.location.href='login.php' and it is working 
+        exit();
+    }
+    function register(){
+        $conn = connectToDb(); //connect to the database
+
+            //check first if it the post is submitted from js
+            if (!empty($_POST)) {
+                // Retrieve form data
+                $firstname = $_POST['firstname'];
+                $lastname = $_POST['lastname'];
+                $email = $_POST['email'];
+                $address = $_POST['address'];
+                $password = $_POST['password']; // Password should ideally be hashed before storing
+
+                //check if email is already in database
+                $sql = "SELECT email FROM users WHERE email = '$email'";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    echo "<script>alert('Email already in use.');</script>";
+                    exit();
+                }
+            }else{
+                exit();
+            }
+
+            //hash the password using salt
+            $password = password_hash($password, PASSWORD_DEFAULT);
+            // Insert data into database table users(user_id	first_name	last_name	email	password	address	active	role)
+            $sql = "INSERT INTO users (first_name, last_name, email, password, address, active, role) VALUES ('$firstname', '$lastname', '$email', '$password', '$address', 1, 2)";
+            //if the query is successful
+            if ($conn->query($sql) === TRUE) {
+                echo "<p>Registration successful.</p>";
+            } else {
+                echo "<p>Error: " . $sql . "<br>" . $conn->error . "</p>";
+            }
+
+            $conn->close();
+
+    }
+
+
 ?>
         
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,51 +88,16 @@
 
         <script src="checkregisterfields.js"></script>
         <script>
-        // When the document is fully loaded, attach the validation to the form
-        document.addEventListener('DOMContentLoaded', function() {
-            checkregisterfields('registrationForm');
-        });
-    </script>
+            // When the document is fully loaded, attach the validation to the form
+            document.addEventListener('DOMContentLoaded', function() {
+                checkregisterfields('registrationForm');
+            });
+        </script>
         
         <!-- now save to database if the checkfields.js is ok -->
 
         <?php
-
-            include 'db.php';
-            $conn = connectToDb(); //connect to the database
-
-            //check first if it the post is submitted from js
-            if (!empty($_POST)) {
-                // Retrieve form data
-                $firstname = $_POST['firstname'];
-                $lastname = $_POST['lastname'];
-                $email = $_POST['email'];
-                $address = $_POST['address'];
-                $password = $_POST['password']; // Password should ideally be hashed before storing
-
-                //check if email is already in database
-                $sql = "SELECT email FROM users WHERE email = '$email'";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) {
-                    echo "<script>alert('Email already in use.');</script>";
-                    exit();
-                }
-            }else{
-                exit();
-            }
-
-            //hash the password using salt
-            $password = password_hash($password, PASSWORD_DEFAULT);
-            // Insert data into database table users(user_id	first_name	last_name	email	password	address	active	role)
-            $sql = "INSERT INTO users (first_name, last_name, email, password, address, active, role) VALUES ('$firstname', '$lastname', '$email', '$password', '$address', 1, 2)";
-            //if the query is successful
-            if ($conn->query($sql) === TRUE) {
-                echo "<p>Registration successful.</p>";
-            } else {
-                echo "<p>Error: " . $sql . "<br>" . $conn->error . "</p>";
-            }
-
-            $conn->close();
+        register();
         ?>
         <!-- if not registered yet send to register.php -->
         <p>Already registered? <a href="login.php">Login here</a>.</p>
