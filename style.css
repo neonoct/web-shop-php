@@ -148,3 +148,12 @@ h2 {
 h3 {
     font-size: 1.17em; /* 1.17 times the size of the base font */
 }
+
+.cat {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -1;
+}
