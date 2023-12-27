@@ -49,7 +49,7 @@ function checkregisterfields(formId) {
             alert('Address is required.');
             return;
         }else if(address.length < 10 || address.indexOf(" ") < 1){
-            alert('Not a valid address (e.g. = 1234 Main St)');
+            alert('Not a valid address (e.g. = 1234 Main St)(Address should be at least 10 characters long and should have a space)');
             return;
         }
 

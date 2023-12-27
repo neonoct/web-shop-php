@@ -9,70 +9,76 @@ if (!isset($_SESSION['role'])) {
 } 
 
 function displayAccountInfo(){
-    $conn = connectToDb(); 
-    $role = $_SESSION['role'];
-    $firstname = htmlspecialchars($_SESSION['firstname']);
-    $lastname = htmlspecialchars($_SESSION['lastname']);
-    
-    if ($role == 1) {
-        echo "<p>Welcome Admin {$firstname} {$lastname}</p>";
-        echo "<a href='admin.php'>Admin Page</a>";
-    } else if ($role == 2) {
-        $email = htmlspecialchars($_SESSION['email']);
-        $address = htmlspecialchars($_SESSION['address']);
-        echo "<p>Welcome Customer {$firstname} {$lastname}</p>";
-        echo "<p>Email: {$email}</p>";
-        echo "<p>Address: {$address}</p>";
-    } 
+    try {
+        $conn = connectToDb(); 
+        $role = $_SESSION['role'];
+        $firstname = htmlspecialchars($_SESSION['firstname']);
+        $lastname = htmlspecialchars($_SESSION['lastname']);
+        
+        if ($role == 1) {
+            echo "<p>Welcome Admin {$firstname} {$lastname}</p>";
+            echo "<a href='admin.php'>Admin Page</a>";
+        } else if ($role == 2) {
+            $email = htmlspecialchars($_SESSION['email']);
+            $address = htmlspecialchars($_SESSION['address']);
+            echo "<p>Welcome Customer {$firstname} {$lastname}</p>";
+            echo "<p>Email: {$email}</p>";
+            echo "<p>Address: {$address}</p>";
+        } 
 
-    $customerID = $_SESSION['user_id'];
-    $stmt = $conn->prepare("SELECT * FROM orders WHERE customerId = ?");
-    $stmt->bind_param("i", $customerID);
-    $stmt->execute();
-    $result = $stmt->get_result();
+        $customerID = $_SESSION['user_id'];
+        $stmt = $conn->prepare("SELECT * FROM orders WHERE customerId = ?");
+        $stmt->bind_param("i", $customerID);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
-        echo "<table><tr><th>Order ID</th><th>Date</th><th>Products</th><th>Total Price</th></tr>";
-        while($row = $result->fetch_assoc()) {
-            $orderID = $row["orderId"];
-            $date = htmlspecialchars($row["date"]);
-            $stmt2 = $conn->prepare("SELECT * FROM ordersproducts WHERE orderId = ?");
-            $stmt2->bind_param("i", $orderID);
-            $stmt2->execute();
-            $result2 = $stmt2->get_result();
-            $products = "";
-            $totalPrice = 0;
-            while($row2 = $result2->fetch_assoc()) {
-                $productId = $row2["productId"];
-                $quantity = $row2["quantity"];
-                $stmt3 = $conn->prepare("SELECT * FROM products WHERE productId = ?");
-                $stmt3->bind_param("i", $productId);
-                $stmt3->execute();
-                $result3 = $stmt3->get_result();
-                while($row3 = $result3->fetch_assoc()) {
-                    $productName = htmlspecialchars($row3["productName"]);
-                    $productPrice = $row3["productPrice"];
-                    $totalPrice += $productPrice * $quantity;
-                    $products .= $productName . " x" . $quantity . " ";
+        if ($result->num_rows > 0) {
+            echo "<table><tr><th>Order ID</th><th>Date</th><th>Products</th><th>Total Price</th></tr>";
+            while($row = $result->fetch_assoc()) {
+                $orderID = $row["orderId"];
+                $date = htmlspecialchars($row["date"]);
+                $stmt2 = $conn->prepare("SELECT * FROM ordersproducts WHERE orderId = ?");
+                $stmt2->bind_param("i", $orderID);
+                $stmt2->execute();
+                $result2 = $stmt2->get_result();
+                $products = "";
+                $totalPrice = 0;
+                while($row2 = $result2->fetch_assoc()) {
+                    $productId = $row2["productId"];
+                    $quantity = $row2["quantity"];
+                    $stmt3 = $conn->prepare("SELECT * FROM products WHERE productId = ?");
+                    $stmt3->bind_param("i", $productId);
+                    $stmt3->execute();
+                    $result3 = $stmt3->get_result();
+                    while($row3 = $result3->fetch_assoc()) {
+                        $productName = htmlspecialchars($row3["productName"]);
+                        $productPrice = $row3["productPrice"];
+                        $totalPrice += $productPrice * $quantity;
+                        $products .= $productName . " x" . $quantity . " ";
+                    }
                 }
-            }
-            $stmt2 = $conn->prepare("SELECT * FROM payments WHERE orderId = ?");
-            $stmt2->bind_param("i", $orderID);
-            $stmt2->execute();
-            $result2 = $stmt2->get_result();
-            while($row2 = $result2->fetch_assoc()) {
-                $amount = $row2["amount"];
-            }
+                $stmt2 = $conn->prepare("SELECT * FROM payments WHERE orderId = ?");
+                $stmt2->bind_param("i", $orderID);
+                $stmt2->execute();
+                $result2 = $stmt2->get_result();
+                while($row2 = $result2->fetch_assoc()) {
+                    $amount = $row2["amount"];
+                }
 
-            echo "<tr><td>{$orderID}</td><td>{$date}</td><td>{$products}</td><td>{$amount}</td></tr>";
+                echo "<tr><td>{$orderID}</td><td>{$date}</td><td>{$products}</td><td>{$amount}</td></tr>";
+            }
+            echo "</table>";
+        } else {
+            echo "0 results";
         }
-        echo "</table>";
-    } else {
-        echo "0 results";
-    }
 
-    echo "<form action='process.php' method='POST'><input type='hidden' name='form_type' value='form10'><button type='submit'>Logout</button></form>";
-    $conn->close();
+        echo "<form action='process.php' method='POST'><input type='hidden' name='form_type' value='form10'><button type='submit'>Logout</button></form>";
+        $conn->close();
+    } catch (Exception $e) {
+        echo "<p>Unable to connect to database</p>";
+        exit();
+    }
+    
 }
 ?>
 <!DOCTYPE html>

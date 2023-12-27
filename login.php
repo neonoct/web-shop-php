@@ -1,8 +1,11 @@
 <?php
+#user passwords =Arkadas1.
+#admin passwords =admin1=admin01., admin2=admin02.
 include 'db.php';
 include "error.php";
 function login() {
-    session_start();
+    try {
+        session_start();
     $conn = connectToDb(); // Connect to the database
     //get elementbyid= mesage and copy the mesage to it
     
@@ -67,6 +70,12 @@ function login() {
     }
 
     $conn->close();
+        
+    } catch (Exception $e) {
+        echo "<script>alert('Connection to database failed.');</script>";
+        exit();
+    }
+    
 }
 ?>
 <!DOCTYPE html>

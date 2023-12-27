@@ -1,4 +1,5 @@
 <?php
+#i didnt add cart to the database or to the cookies so when the session is closed the cart is empty
 session_start();
 include 'db.php';
 include "error.php";
@@ -9,62 +10,66 @@ if (!isset($_SESSION['role'])) {
 }
 
 function displayCart() {
-    $conn = connectToDb();
+    try {
+        $conn = connectToDb();
 
-    echo "<div class='flex-container'>";
-    $totalItems = 0;
-    $totalPrice = 0.0;
-    if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
-        foreach ($_SESSION['cart'] as $productId => $quantity) {
-            // Prepared statement for retrieving product details
-            $sql = "SELECT productId, productName, productPrice, description, imageUrl FROM products WHERE productId = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("s", $productId);
-            $stmt->execute();
-            $result = $stmt->get_result();
+        echo "<div class='flex-container'>";
+        $totalItems = 0;
+        $totalPrice = 0.0;
+        if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+            foreach ($_SESSION['cart'] as $productId => $quantity) {
+                // Prepared statement for retrieving product details
+                $sql = "SELECT productId, productName, productPrice, description, imageUrl FROM products WHERE productId = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("s", $productId);
+                $stmt->execute();
+                $result = $stmt->get_result();
 
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    echo "<div>";
-                    echo "<img src='" . htmlspecialchars($row['imageUrl']) . "' alt='" . htmlspecialchars($row['productName']) . "'>";
-                    echo "<h4>" . htmlspecialchars($row['productName']) . "</h4>";
-                    echo "<p>" . htmlspecialchars($row['description']) . "</p>";
-                    echo "<p>Price: " . htmlspecialchars($row['productPrice']) . "</p>";
-                    echo "<form method='post' action='process.php' id='updateForm" . $productId . "'>";
-                    echo "<input type='hidden' name='form_type' value='form1'>";
-                    echo "<input type='number' name='quantity' value='" . htmlspecialchars($quantity) . "' onchange='document.getElementById(\"updateForm" . htmlspecialchars($productId) . "\").submit();'>";
-                    echo "<input type='hidden' name='productId' value='" . htmlspecialchars($productId) . "'>";
-                    echo "</form>";
-                    echo "<form method='post' action='process.php'>";
-                    echo "<input type='hidden' name='productId' value='" . htmlspecialchars($productId) . "'>";
-                    echo "<input type='hidden' name='form_type' value='form2'>";
-                    echo "<input type='hidden' name='remove' value='1'>";
-                    echo "<input type='submit' value='Remove'>";
-                    echo "</form>";
-                    echo "</div>";
-                    $totalItems += $quantity;
-                    $totalPrice += $row['productPrice'] * $quantity;
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<div>";
+                        echo "<img src='" . htmlspecialchars($row['imageUrl']) . "' alt='" . htmlspecialchars($row['productName']) . "'>";
+                        echo "<h4>" . htmlspecialchars($row['productName']) . "</h4>";
+                        echo "<p>" . htmlspecialchars($row['description']) . "</p>";
+                        echo "<p>Price: " . htmlspecialchars($row['productPrice']) . "</p>";
+                        echo "<form method='post' action='process.php' id='updateForm" . $productId . "'>";
+                        echo "<input type='hidden' name='form_type' value='form1'>";
+                        echo "<input type='number' name='quantity' value='" . htmlspecialchars($quantity) . "' onchange='document.getElementById(\"updateForm" . htmlspecialchars($productId) . "\").submit();'>";
+                        echo "<input type='hidden' name='productId' value='" . htmlspecialchars($productId) . "'>";
+                        echo "</form>";
+                        echo "<form method='post' action='process.php'>";
+                        echo "<input type='hidden' name='productId' value='" . htmlspecialchars($productId) . "'>";
+                        echo "<input type='hidden' name='form_type' value='form2'>";
+                        echo "<input type='hidden' name='remove' value='1'>";
+                        echo "<input type='submit' value='Remove'>";
+                        echo "</form>";
+                        echo "</div>";
+                        $totalItems += $quantity;
+                        $totalPrice += $row['productPrice'] * $quantity;
+                    }
+                } else {
+                    echo "No products found.";
                 }
-            } else {
-                echo "No products found.";
             }
+        } else {
+            echo "Your cart is empty.";
         }
-    } else {
-        echo "Your cart is empty.";
+        echo "</div>";
+
+        echo "<p>Total items: " . $totalItems . "</p>";
+        echo "<p>Total: " . $totalPrice . "</p>";
+        $_SESSION['totalPrice'] = $totalPrice;
+        $_SESSION['totalItems'] = $totalItems;
+
+        echo "<form  method='POST' action='process.php'>";
+        echo "<input type='hidden' name='form_type' value='form11'>";
+        echo "<input type='submit' value='Checkout'>";
+        echo "</form>";
+
+        $conn->close();
+    } catch (Exception $e) {
+        echo 'Caught exception: ',  $e->getMessage(), "\n";
     }
-    echo "</div>";
-
-    echo "<p>Total items: " . $totalItems . "</p>";
-    echo "<p>Total: " . $totalPrice . "</p>";
-    $_SESSION['totalPrice'] = $totalPrice;
-    $_SESSION['totalItems'] = $totalItems;
-
-    echo "<form  method='POST' action='process.php'>";
-    echo "<input type='hidden' name='form_type' value='form11'>";
-    echo "<input type='submit' value='Checkout'>";
-    echo "</form>";
-
-    $conn->close();
 }
 
 ?>

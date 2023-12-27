@@ -3,36 +3,42 @@ include 'db.php';
 include "error.php";
 
 function displayProducts() {
-    $conn = connectToDb(); // Connect to the database
+    try{
+        $conn = connectToDb(); // Connect to the database
 
-    // Prepared statement for selecting products
-    $sql = "SELECT productId, productName, description, productPrice, imageUrl FROM products WHERE active = 1";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $result = $stmt->get_result();
+        // Prepared statement for selecting products
+        $sql = "SELECT productId, productName, description, productPrice, imageUrl FROM products WHERE active = 1";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    // Check if there are results
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo '<form method="post" action="process.php">';
-            echo '<input type="hidden" name="form_type" value="form12">';
-            echo '<div class="product-item">';
-            echo '<img src="' . htmlspecialchars($row["imageUrl"]) . '" alt="' . htmlspecialchars($row["productName"]) . '">';
-            echo '<h4>' . htmlspecialchars($row["productName"]) . '</h4>';
-            echo '<p class="description">' . htmlspecialchars($row["description"]) . '</p>';
-            echo '<p class="price">Price: $' . htmlspecialchars($row["productPrice"]) . '</p>';
-            echo '<input type="hidden" name="productId" value="' . htmlspecialchars($row["productId"]) . '">';
-            echo '<button type="submit">Add to Cart</button>';
-            echo '</div>';
-            echo '</form>';
+        // Check if there are results
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                echo '<form method="post" action="process.php">';
+                echo '<input type="hidden" name="form_type" value="form12">';
+                echo '<div class="product-item">';
+                echo '<img src="' . htmlspecialchars($row["imageUrl"]) . '" alt="' . htmlspecialchars($row["productName"]) . '">';
+                echo '<h4>' . htmlspecialchars($row["productName"]) . '</h4>';
+                echo '<p class="description">' . htmlspecialchars($row["description"]) . '</p>';
+                echo '<p class="price">Price: $' . htmlspecialchars($row["productPrice"]) . '</p>';
+                echo '<input type="hidden" name="productId" value="' . htmlspecialchars($row["productId"]) . '">';
+                echo '<button type="submit">Add to Cart</button>';
+                echo '</div>';
+                echo '</form>';
+            }
+        } else {
+            echo "0 results";
         }
-    } else {
-        echo "0 results";
+
+        // Close connection
+        $stmt->close();
+        $conn->close();
+        } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
     }
 
-    // Close connection
-    $stmt->close();
-    $conn->close();
+    
 }
 ?>
 <!DOCTYPE html>

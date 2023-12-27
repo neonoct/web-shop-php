@@ -1,6 +1,6 @@
 <?php
 ########
-#there arent any javascript checks for the admin page forms as i couldnt find enough time to do them
+#there arent any javascript checks for the admin page forms where admin adds new user or product 
 #####
 include 'db.php';
 include "error.php";
@@ -13,7 +13,8 @@ if (empty($_SESSION['role']) || $_SESSION['role'] != 1) {
 }
 
 function manipulateUser() {
-    $conn = connectToDb();
+    try{
+        $conn = connectToDb();
 
 
     // Prepared statement for selecting users
@@ -70,6 +71,10 @@ function manipulateUser() {
     // ...
 
     $conn->close();
+    }catch(Exception $e){
+        echo $e->getMessage();
+    }
+    
 }
 
 function manipulateProduct() {

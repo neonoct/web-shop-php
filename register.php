@@ -13,7 +13,9 @@ if (!empty($_SESSION['role']) && ($_SESSION['role'] == 1 || $_SESSION['role'] ==
 }
 
 function register() {
-    $conn = connectToDb(); // Connect to the database
+
+    try {
+        $conn = connectToDb(); // Connect to the database
     $messageString = "<script>document.getElementById('message').innerHTML = '";
 
     if (!empty($_POST)) {
@@ -64,6 +66,11 @@ function register() {
     }
 
     $conn->close();
+    } catch (Exception $e) {
+        echo "<script>alert('Error connecting to the database.');</script>";
+        exit();
+    }
+    
 }
 ?>
 <!DOCTYPE html>
