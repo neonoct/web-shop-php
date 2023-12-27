@@ -20,7 +20,8 @@ function login() {
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             if ($row['active'] == 0) {
-                echo "<p>User is not active.</p>";
+                #echo "<p>User is not active.</p>"; alert
+                echo "<script>alert('User is not active.');</script>";
                 exit();
             }
             if (password_verify($password, $row['password'])) {
@@ -41,10 +42,12 @@ function login() {
                 }
                 exit();
             } else {
-                echo "<p>Invalid password.</p>";
+                #echo "<p>Invalid password.</p>"; alert
+                echo "<script>alert('Invalid password.');</script>";
             }
         } else {
-            echo "<p>Invalid email.</p>";
+            #echo "<p>Invalid email.</p>"; alert
+            echo "<script>alert('Invalid email.');</script>";
         }
     }else{
         exit();
@@ -85,9 +88,10 @@ function login() {
         </form>
         <!-- if not registered yet send to register.php -->
         <p>Not registered yet? <a href="register.php">Register here</a>.</p>
-        <?php login();?>
+       
     </main>
-
+    <?php login();?>
+    
     <footer>
         <p>Contact Us: contact@frk-tech.com</p>
     </footer>
