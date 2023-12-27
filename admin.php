@@ -163,6 +163,7 @@ function manipulateData() {
 <head>
     <meta charset="UTF-8">
     <title>Admin Page</title>
+    <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>

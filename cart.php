@@ -79,6 +79,7 @@ function displayCart() {
 <head>
     <meta charset="UTF-8">
     <title>Cart</title>
+    <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="cart.css">
 </head>
 <body>

@@ -136,3 +136,15 @@ footer {
     border-radius: 5px;
     background-color: white;
 }
+
+h1 {
+    font-size: 2em; /* 2 times the size of the base font */
+}
+
+h2 {
+    font-size: 1.5em; /* 1.5 times the size of the base font */
+}
+
+h3 {
+    font-size: 1.17em; /* 1.17 times the size of the base font */
+}
