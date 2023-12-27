@@ -2,6 +2,11 @@
 ########
 #there arent any javascript checks for the admin page forms where admin adds new user or product 
 #####
+#because we made a active column in the database for users and products 
+#so if admin removes a user or product it will be removed from the page but not from the database
+#only the active column will be set to 0
+#this also ensures that same email cant be used after admin removes it (if the user is removed by admin)
+#so in the database Webuser can only select, update, insert
 include 'db.php';
 include "error.php";
 session_start();

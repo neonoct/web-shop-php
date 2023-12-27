@@ -30,6 +30,8 @@ include "error.php";
     <main>
         <h2>Welcome to Our Webshop!</h2>
         <h3>some info about Webshop</h3>
+        
+
     </main>
 
     <footer>
