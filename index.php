@@ -32,7 +32,7 @@ include "error.php";
         <h3>Here is some info about Webshop</h3>
         
         <!-- add an fancy image here related with webshop that sells pc,laptopl and accesories -->
-        <img src="cat.png" class='cat'>
+        <img src="cat.png" class='cat' alt='catimage'>
         
         
         
