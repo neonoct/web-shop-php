@@ -14,6 +14,7 @@ if (!empty($_SESSION['role']) && ($_SESSION['role'] == 1 || $_SESSION['role'] ==
 
 function register() {
     $conn = connectToDb(); // Connect to the database
+    $messageString = "<script>document.getElementById('message').innerHTML = '";
 
     if (!empty($_POST)) {
         // Retrieve and sanitize form data
@@ -30,7 +31,9 @@ function register() {
         $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
-            echo "<script>alert('Email already in use.');</script>";
+            $messageString .= "Email already exists.";
+            $messageString .= "';</script>";
+            echo $messageString;
             exit();
         }
 
@@ -44,9 +47,15 @@ function register() {
         $stmt->bind_param("sssss", $firstname, $lastname, $email, $passwordHash, $address);
 
         if ($stmt->execute()) {
-            echo "<p>Registration successful.</p>";
+            // Registration successful
+            echo "<script>alert('Registration successful.');</script>";
+            echo "<script>window.location.href='login.php';</script>";
+            exit();
         } else {
-            echo "<p>Error: " . htmlspecialchars($conn->error) . "</p>";
+            #echo "<p>Error: " . htmlspecialchars($conn->error) . "</p>";
+            $messageString .= "Error: " . htmlspecialchars($conn->error);
+            $messageString .= "';</script>";
+            echo $messageString;
         }
 
         $stmt->close();
@@ -102,9 +111,10 @@ function register() {
         
         <!-- now save to database if the checkfields.js is ok -->
 
-        <?php register();?>
+        
         <!-- if already registered link to login -->
         <p>Already registered? <a href="login.php">Login here</a>.</p>
+        <p id='message'></p>
     </main>
 
     <footer>
@@ -112,3 +122,4 @@ function register() {
     </footer>
 </body>
 </html>
+<?php register();?>

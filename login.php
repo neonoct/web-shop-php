@@ -4,6 +4,10 @@ include "error.php";
 function login() {
     session_start();
     $conn = connectToDb(); // Connect to the database
+    //get elementbyid= mesage and copy the mesage to it
+    
+    $messageString = "<script>document.getElementById('message').innerHTML = '";
+
 
     if (!empty($_POST)) {
         // Retrieve form data
@@ -20,8 +24,11 @@ function login() {
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             if ($row['active'] == 0) {
-                #echo "<p>User is not active.</p>"; alert
-                echo "<script>alert('User is not active.');</script>";
+                #echo "<p>User is not active.</p>";
+                #echo "<script>alert('User is not active.');</script>";
+                $messageString .= "User is not active.";
+                $messageString .= "';</script>";
+                echo $messageString;
                 exit();
             }
             if (password_verify($password, $row['password'])) {
@@ -42,12 +49,18 @@ function login() {
                 }
                 exit();
             } else {
-                #echo "<p>Invalid password.</p>"; alert
-                echo "<script>alert('Invalid password.');</script>";
+                #echo "<p>Invalid password.</p>"; 
+                #echo "<script>alert('Invalid password.');</script>";
+                $messageString .= "Invalid password.";
+                $messageString .= "';</script>";
+                echo $messageString;
             }
         } else {
-            #echo "<p>Invalid email.</p>"; alert
-            echo "<script>alert('Invalid email.');</script>";
+            #echo "<p>Invalid email.</p>"; 
+            #echo "<script>alert('Invalid email.');</script>";
+            $messageString .= "Invalid email.";
+            $messageString .= "';</script>";
+            echo $messageString;
         }
     }else{
         exit();
@@ -88,9 +101,10 @@ function login() {
         </form>
         <!-- if not registered yet send to register.php -->
         <p>Not registered yet? <a href="register.php">Register here</a>.</p>
+        <p id='message'></p>
        
     </main>
-    <?php login();?>
+    
     
     <footer>
         <p>Contact Us: contact@frk-tech.com</p>
@@ -98,3 +112,4 @@ function login() {
     <script src="checkloginfields.js"></script>
 </body>
 </html>
+<?php login();?>
