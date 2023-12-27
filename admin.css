@@ -89,7 +89,7 @@ tr:hover {
 }
 
 /* make the each form element as big as table each td */
-input[type=text], textarea,input[type=password],#role{
+input[type=text], textarea,input[type=password],.role{
     width: 11%;
     padding: 12px;
     border: 1px solid #ccc;

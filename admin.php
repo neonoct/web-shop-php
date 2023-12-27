@@ -60,7 +60,7 @@ function manipulateUser() {
     echo "<input type='password' id='password' name='password' placeholder='Password'>";
     echo "<input type='password' id='confirmPassword' name='confirmpassword' placeholder='Password'>";
     echo "<input type='text' name='address' placeholder='Address'>";
-    echo "<select name='role' id='role'>";
+    echo "<select name='role' class='role'>";
     echo "<option value='2'>User</option>";
     echo "<option value='1'>Admin</option>";
     echo "</select>";
@@ -134,7 +134,7 @@ function manipulateProduct() {
     echo "<input type='text' name='productprice' placeholder='Product Price'>";
     echo "<input type='text' name='description' placeholder='Description'>";
     echo "<input type='text' name='imageurl' placeholder='Image URL'>";
-    echo "<select name='categoryId' id='role'>";
+    echo "<select name='categoryId' class='role'>";
     echo "<option value='1'>Laptop</option>";
     echo "<option value='2'>Desktop</option>";
     echo "<option value='3'>Accessory</option>";
