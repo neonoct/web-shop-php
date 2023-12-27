@@ -8,7 +8,6 @@ function login() {
         session_start();
     $conn = connectToDb(); // Connect to the database
     //get elementbyid= mesage and copy the mesage to it
-    
     $messageString = "<script>document.getElementById('message').innerHTML = '";
 
 
@@ -109,7 +108,7 @@ function login() {
             <input type="password" id="loginPassword" name="password" placeholder="Password" >
             <button type="submit">Login</button>
         </form>
-        <!-- if not registered yet send to register.php -->
+        <!-- if not registered yet link to register.php -->
         <p>Not registered yet? <a href="register.php">Register here</a>.</p>
         <p id='message'></p>
        

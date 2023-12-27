@@ -16,14 +16,12 @@ function checkregisterfields(formId) {
         var password = document.getElementById('password').value;
         var confirmPassword = document.getElementById('confirmPassword').value;
 
-        // Validate each field here
-        // Example: Check if the firstname is not empty
+        // Check firstname
         if (firstname.trim() === '' || firstname.length < 2 ) {
             alert('First name is required and should be at least 2 characters long. ');
             return;
         }
 
-        // Continue with other validations...
         // Check lastname, email, address, password, confirmPassword
         if (lastname.trim() === '' || lastname.length < 2) {
             alert('Last name is required and should be at least 2 characters long.');

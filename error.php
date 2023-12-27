@@ -1,4 +1,5 @@
 <?php
+#i didnt clear the log file, so it has some old errors that are not accuring anymore
 //toplevel error handling
 function handleError($errno, $errstr, $errfile, $errline) {
     #add date to error message

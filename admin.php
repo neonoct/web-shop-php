@@ -31,7 +31,6 @@ function manipulateUser() {
         while($row = $result->fetch_assoc()) {
             // Echo with htmlspecialchars
             echo "<tr><td>".htmlspecialchars($row["user_id"])."</td>";
-            // Continue echoing other fields with htmlspecialchars...
             echo "<td>".htmlspecialchars($row["first_name"])."</td>";
             echo "<td>".htmlspecialchars($row["last_name"])."</td>";
             echo "<td>".htmlspecialchars($row["email"])."</td>";
@@ -68,7 +67,7 @@ function manipulateUser() {
     echo "<button type='submit' name='add' value='add'>Add User</button>";
     echo "</form>";
     echo '<p>*to add a user you need to fill at least the firstname, lastname, email, password(and confirmpassword), and role fields</p>';
-    // ...
+    
 
     $conn->close();
     }catch(Exception $e){
@@ -116,7 +115,6 @@ function manipulateProduct() {
                 echo "<td><input type='text' name='productName' value='".htmlspecialchars($row["productName"])."'></td>";
                 echo "<td><input type='text' id='description' name='description' value='".htmlspecialchars($row["description"])."'></td>";
                 echo "<td><input type='text' name='productPrice' value='".htmlspecialchars($row["productPrice"])."'></td>";
-                #echo "<td><input type='text' name='categoryId' value='".htmlspecialchars($row["categoryId"])."'></td>";
                 // Add a select box for category
                 echo "<td><select name='categoryId'>";
                 echo "<option value='1'".($row["categoryId"] == 1 ? ' selected' : '').">Laptop</option>";

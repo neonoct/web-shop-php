@@ -6,8 +6,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     var email = document.getElementById('loginEmail').value;
     var password = document.getElementById('loginPassword').value;
 
-    // Validate each field here
-    // Example: Check if the email is not empty
+    // Check if email is valid
     if (email.trim() === '' ) {
         alert('Email is required.');
         return;

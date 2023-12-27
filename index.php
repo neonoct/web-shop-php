@@ -29,10 +29,7 @@ include "error.php";
 
     <main>
         <h2>Welcome to Our Webshop!</h2>
-        <!-- Featured Products Section -->
-        <section class="featured-products">
-            <h3>put some info about Webshop</h3>
-        </section>
+        <h3>some info about Webshop</h3>
     </main>
 
     <footer>
