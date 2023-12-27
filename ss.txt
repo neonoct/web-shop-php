@@ -72,3 +72,26 @@ cho "<td><form action='process.php' method='POST'><input type='hidden' name='pro
                 
             }
 
+
+function editProduct(){
+    if(isset($_POST["remove"])){
+        echo "<form action='process.php' method='POST'>";
+        echo "<input type='hidden' name='form_type' value='form8'>";
+        echo "<tr><td><input type='hidden' name='productId' value='".htmlspecialchars($_POST["productId"])."'>".htmlspecialchars($_POST["productId"])."</td>";
+        echo "<td><input type='text' name='productName' value='".htmlspecialchars($_POST["productName"])."'></td>";
+        echo "<td><input type='text' id='description' name='description' value='".htmlspecialchars($_POST["description"])."'></td>";
+        echo "<td><input type='text' name='productPrice' value='".htmlspecialchars($_POST["productPrice"])."'></td>";
+        #echo "<td><input type='text' name='categoryId' value='".htmlspecialchars($row["categoryId"])."'></td>";
+        // Add a select box for category
+        echo "<td><select name='categoryId'>";
+        echo "<option value='1'".($_POST["categoryId"] == 1 ? ' selected' : '').">Laptop</option>";
+        echo "<option value='2'".($_POST["categoryId"] == 2 ? ' selected' : '').">Desktop</option>";
+        echo "<option value='3'".($_POST["categoryId"] == 3 ? ' selected' : '').">Accessory</option>";
+        echo "</select></td>";
+        echo "<td><input type='text' name='imageUrl' value='".htmlspecialchars($_POST["imageUrl"])."'></td>";
+        echo "<td><button type='submit' name='save' value='".htmlspecialchars($_POST["productId"])."'>Save</button></td></tr>";
+        echo "</form>";
+        
+    }
+    
+}

@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+
 function updateCart() {
     session_start();
     if (isset($_POST['productId'])) {
