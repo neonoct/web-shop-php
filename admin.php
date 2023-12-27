@@ -103,7 +103,7 @@ function manipulateProduct() {
             echo "<td>".htmlspecialchars($cat)."</td>";
             echo "<td>".htmlspecialchars($row["imageUrl"])."</td>";
             echo "<td><form action='process.php' method='POST'><input type='hidden' name='form_type' value='form6'><button type='submit' name='remove' value='".htmlspecialchars($row["productId"])."'>Remove</button></form></td>";
-            echo "<td><form id='edit' method='POST'><input type='hidden' name='form_type' value='form7'><button type='submit' name='edit' value='".htmlspecialchars($row["productId"])."'>Edit</button></form></td></tr>";
+            echo "<td><form id='edit-".htmlspecialchars($row["productId"])."' method='POST'><input type='hidden' name='form_type' value='form7'><button type='submit' name='edit' value='".htmlspecialchars($row["productId"])."'>Edit</button></form></td></tr>";
             if(isset($_POST['edit']) && $_POST['edit'] == $row["productId"]){
                 echo "<form action='process.php' method='POST'>";
                 echo "<input type='hidden' name='form_type' value='form8'>";

@@ -1,0 +1,74 @@
+function editProduct(){
+    if(isset($_POST["remove"])){
+        echo "<form action='process.php' method='POST'>";
+        echo "<input type='hidden' name='form_type' value='form8'>";
+        echo "<tr><td><input type='hidden' name='productId' value='".htmlspecialchars($_POST["productId"])."'>".htmlspecialchars($_POST["productId"])."</td>";
+        echo "<td><input type='text' name='productName' value='".htmlspecialchars($_POST["productName"])."'></td>";
+        echo "<td><input type='text' id='description' name='description' value='".htmlspecialchars($_POST["description"])."'></td>";
+        echo "<td><input type='text' name='productPrice' value='".htmlspecialchars($_POST["productPrice"])."'></td>";
+        #echo "<td><input type='text' name='categoryId' value='".htmlspecialchars($row["categoryId"])."'></td>";
+        // Add a select box for category
+        echo "<td><select name='categoryId'>";
+        echo "<option value='1'".($_POST["categoryId"] == 1 ? ' selected' : '').">Laptop</option>";
+        echo "<option value='2'".($_POST["categoryId"] == 2 ? ' selected' : '').">Desktop</option>";
+        echo "<option value='3'".($_POST["categoryId"] == 3 ? ' selected' : '').">Accessory</option>";
+        echo "</select></td>";
+        echo "<td><input type='text' name='imageUrl' value='".htmlspecialchars($_POST["imageUrl"])."'></td>";
+        echo "<td><button type='submit' name='save' value='".htmlspecialchars($_POST["productId"])."'>Save</button></td></tr>";
+        echo "</form>";
+        
+    }
+    
+}
+
+cho "<td><form action='process.php' method='POST'><input type='hidden' name='productId' value='" . htmlspecialchars($row["productId"]) . "'><input type='hidden' name='form_type' value='form7'>";
+            //send productName, productPrice, description, imageUrl, and categoryId in hidden inputs
+            echo "<input type='hidden' name='productName' value='".htmlspecialchars($row["productName"])."'>";
+            echo "<input type='hidden' name='productPrice' value='".htmlspecialchars($row["productPrice"])."'>";
+            echo "<input type='hidden' name='description' value='".htmlspecialchars($row["description"])."'>";
+            echo "<input type='hidden' name='imageUrl' value='".htmlspecialchars($row["imageUrl"])."'>";
+            echo "<input type='hidden' name='categoryId' value='".htmlspecialchars($row["categoryId"])."'>";
+            echo "<button type='submit' name='edit' value='".htmlspecialchars($row["productId"])."'>Edit</button></form></td></tr>";
+
+            if(isset($_POST['edit']) && $_POST['edit'] == $row["productId"]){
+                echo "<form action='process.php' method='POST'>";
+                echo "<input type='hidden' name='form_type' value='form8'>";
+                echo "<tr><td><input type='hidden' name='productId' value='".htmlspecialchars($row["productId"])."'>".htmlspecialchars($row["productId"])."</td>";
+                echo "<td><input type='text' name='productName' value='".htmlspecialchars($row["productName"])."'></td>";
+                echo "<td><input type='text' id='description' name='description' value='".htmlspecialchars($row["description"])."'></td>";
+                echo "<td><input type='text' name='productPrice' value='".htmlspecialchars($row["productPrice"])."'></td>";
+                #echo "<td><input type='text' name='categoryId' value='".htmlspecialchars($row["categoryId"])."'></td>";
+                // Add a select box for category
+                echo "<td><select name='categoryId'>";
+                echo "<option value='1'".($row["categoryId"] == 1 ? ' selected' : '').">Laptop</option>";
+                echo "<option value='2'".($row["categoryId"] == 2 ? ' selected' : '').">Desktop</option>";
+                echo "<option value='3'".($row["categoryId"] == 3 ? ' selected' : '').">Accessory</option>";
+                echo "</select></td>";
+                echo "<td><input type='text' name='imageUrl' value='".htmlspecialchars($row["imageUrl"])."'></td>";
+                echo "<td><button type='submit' name='save' value='".htmlspecialchars($row["productId"])."'>Save</button></td></tr>";
+                echo "</form>";
+                
+            }
+
+
+
+                        if(isset($_POST['edit']) && $_POST['edit'] == $row["productId"]){
+                echo "<form action='process.php' method='POST'>";
+                echo "<input type='hidden' name='form_type' value='form8'>";
+                echo "<tr><td><input type='hidden' name='productId' value='".htmlspecialchars($row["productId"])."'>".htmlspecialchars($row["productId"])."</td>";
+                echo "<td><input type='text' name='productName' value='".htmlspecialchars($row["productName"])."'></td>";
+                echo "<td><input type='text' id='description' name='description' value='".htmlspecialchars($row["description"])."'></td>";
+                echo "<td><input type='text' name='productPrice' value='".htmlspecialchars($row["productPrice"])."'></td>";
+                #echo "<td><input type='text' name='categoryId' value='".htmlspecialchars($row["categoryId"])."'></td>";
+                // Add a select box for category
+                echo "<td><select name='categoryId'>";
+                echo "<option value='1'".($row["categoryId"] == 1 ? ' selected' : '').">Laptop</option>";
+                echo "<option value='2'".($row["categoryId"] == 2 ? ' selected' : '').">Desktop</option>";
+                echo "<option value='3'".($row["categoryId"] == 3 ? ' selected' : '').">Accessory</option>";
+                echo "</select></td>";
+                echo "<td><input type='text' name='imageUrl' value='".htmlspecialchars($row["imageUrl"])."'></td>";
+                echo "<td><button type='submit' name='save' value='".htmlspecialchars($row["productId"])."'>Save</button></td></tr>";
+                echo "</form>";
+                
+            }
+
