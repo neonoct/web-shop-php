@@ -79,24 +79,18 @@ function login() {
     <main>
         <h2>Welcome to Our Webshop!</h2>
         <form id="loginForm" class="login-form" method="POST">
-            <input type="email" id="loginEmail" name="email" placeholder="Email" required>
-            <input type="password" id="loginPassword" name="password" placeholder="Password" required>
+            <input type="text" id="loginEmail" name="email" placeholder="Email" >
+            <input type="password" id="loginPassword" name="password" placeholder="Password" >
             <button type="submit">Login</button>
         </form>
         <!-- if not registered yet send to register.php -->
         <p>Not registered yet? <a href="register.php">Register here</a>.</p>
-
-        <script src="checkloginfields.js"></script>
-
-        <?php
-        login();
-        ?>
-
-
+        <?php login();?>
     </main>
 
     <footer>
         <p>Contact Us: contact@frk-tech.com</p>
     </footer>
+    <script src="checkloginfields.js"></script>
 </body>
 </html>
